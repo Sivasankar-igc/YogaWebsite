@@ -36,10 +36,10 @@ web.use("/api/admin", adminRouter)
 web.get("/api/", getAllYogaContents);
 web.get("/api/getPremiumDetails", getPremiumDetails)
 
-web.use(express.static(path.join(__dirname, "../Frontend/YogaWebsite/dist")))
+web.use(express.static(path.join(__dirname, "./dist")))
 web.get("*", (req, res) => {
     try {
-        res.sendFile(path.join(__dirname, "../Frontend/YogaWebsite/dist/index.html"))
+        res.sendFile(path.join(__dirname, "./dist/index.html"))
     } catch (error) {
         console.error(`Server error : couldn't get clientside files --> ${error}`)
     }
