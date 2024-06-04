@@ -9,9 +9,11 @@ import { getAllYogaContents } from "./Controllers/OtherControllers/getAllYogaCon
 import { getPremiumDetails } from "./Controllers/OtherControllers/getPremiumDetails.mjs";
 import cookieParser from "cookie-parser";
 
+import bcryptjs from "bcryptjs"
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import adminCol from "./Models/adminModel.mjs";
 
 const web = express();
 const PORT = process.env.PORT || 8000;
@@ -44,5 +46,7 @@ web.get("*", (req, res) => {
         console.error(`Server error : couldn't get clientside files --> ${error}`)
     }
 })
+
+
 
 web.listen(PORT, () => console.log(`Server listening at port number ${PORT}`))

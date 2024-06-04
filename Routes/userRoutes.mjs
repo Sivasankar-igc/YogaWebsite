@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get("/", getUserDetails); // middleware will be implemented
 router.post("/signin", signin);
-router.post("/login", login);
+router.post("/userLogin", login);
 router.put("/logout", logout)
 
 router.put("/updateDetails/:mail", updateDetails);
