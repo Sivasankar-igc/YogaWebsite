@@ -1,14 +1,14 @@
 import express from "express";
 import { getUserDetails, login, logout, signin } from "../Controllers/UserControllers/signing_login.mjs";
 import { updateDetails, updateFeedback, updatePassword } from "../Controllers/UserControllers/updateUserInfo.mjs";
-import { addComment, addPremium, buyVideo, disLikeVideo, likeVideo, payment, trackHasVideoWatched, trackTotalVideoWatched } from "../Controllers/UserControllers/trackUserActivity.mjs";
-import { upload } from "../utils/uploadImage.mjs";
+import { addComment, addPremium, buyVideo, contactUs, disLikeVideo, likeVideo, payment, trackHasVideoWatched, trackTotalVideoWatched } from "../Controllers/UserControllers/trackUserActivity.mjs";
+import { uploadPayment } from "../utils/uploadImage.mjs";
 
 const router = express.Router();
 
 router.get("/", getUserDetails); // middleware will be implemented
 router.post("/signin", signin);
-router.post("/login", login);
+router.post("/userLogin", login);
 router.put("/logout", logout)
 
 router.put("/updateDetails/:mail", updateDetails);
@@ -25,6 +25,6 @@ router.put("/like/:contentId", likeVideo)
 router.put("/dislike/:contentId", disLikeVideo)
 router.post("/addComment", addComment)
 
-router.post("/payment/:mailId", upload.single("file"), payment)
-
+router.post("/payment/:mailId", uploadPayment.single("file"), payment)
+router.post("/contactUs", contactUs)
 export { router }

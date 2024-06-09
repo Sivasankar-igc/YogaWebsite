@@ -1,7 +1,8 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 
-const storage = multer.diskStorage({
+const paymentStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, '../server/PaymentImages')
     },
@@ -10,6 +11,20 @@ const storage = multer.diskStorage({
     }
 })
 
-export const upload = multer({
-    storage: storage
+const homePageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '../server/HomePageImage')
+    },
+    filename: (req, file, cb) => {
+        cb(null, "homepage_herosection" + Date.now() + path.extname(file.originalname))
+    }
+})
+
+
+export const uploadPayment = multer({
+    storage: paymentStorage
+})
+
+export const uploadHomePage = multer({
+    storage: homePageStorage
 })

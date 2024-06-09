@@ -60,7 +60,7 @@ export const signin = async (req, res) => {
 
                         res.cookie("benifitsofyogawithmanoj", token, {
                             httpOnly: true,
-                            expiresIn: "30d"
+                            expiresIn: Date.now() + (30 * 24 * 60 * 60 * 1000)
                         })
 
                         res.status(200).json({ status: true, message: response })
@@ -92,7 +92,7 @@ export const login = async (req, res) => {
                 const token = jwt.sign({ tokenId: user._id }, JWT_SECRET)
                 res.cookie("benifitsofyogawithmanoj", token, {
                     httpOnly: true,
-                    expiresIn: "30d"
+                    expiresIn: Date.now() + (30 * 24 * 60 * 60 * 1000)
                 })
 
                 res.status(200).json({ status: true, message: user })

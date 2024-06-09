@@ -7,11 +7,14 @@ import { router as adminRouter } from "./Routes/adminRoutes.mjs";
 import { router as userRouter } from "./Routes/userRoutes.mjs";
 import { getAllYogaContents } from "./Controllers/OtherControllers/getAllYogaContents.mjs";
 import { getPremiumDetails } from "./Controllers/OtherControllers/getPremiumDetails.mjs";
+import { getHomePageContents, getAboutPageContents, getContactPageContents } from "./Controllers/OtherControllers/getWebsiteContents.mjs"
 import cookieParser from "cookie-parser";
 
+import bcryptjs from "bcryptjs"
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import adminCol from "./Models/adminModel.mjs";
 
 const web = express();
 const PORT = process.env.PORT || 8000;
@@ -31,18 +34,45 @@ mongoose.connect(process.env.MONGODB_URI)
 
 setInterval(handleStreakUpdation, 3600000); // ```To handle the streak updation of all user
 
-web.use("/api/user", userRouter)
-web.use("/api/admin", adminRouter)
+web.use("/homePageImages", express.static("./HomePageImage"))
+
+web.use("/api/user", userRouter);
+web.use("/api/admin", adminRouter);
 web.get("/api/", getAllYogaContents);
 web.get("/api/getPremiumDetails", getPremiumDetails)
+web.get("/api/getHomePageContents", getHomePageContents)
+web.get("/api/getAboutPageContents", getAboutPageContents)
+web.get("/api/getContactPageContents", getContactPageContents)
 
-web.use(express.static(path.join(__dirname, "../Frontend/YogaWebsite/dist")))
+
+web.use(express.static(path.join(__dirname, "./dist")))
 web.get("*", (req, res) => {
     try {
-        res.sendFile(path.join(__dirname, "../Frontend/YogaWebsite/dist/index.html"))
+        res.sendFile(path.join(__dirname, "./dist/index.html"))
     } catch (error) {
         console.error(`Server error : couldn't get clientside files --> ${error}`)
     }
 })
+
+
+// const addAdmin = async (req, res) => {
+//     try {
+//         const pass = "admin@connect"
+//         const salt = await bcryptjs.genSalt(10)
+//         const hash = await bcryptjs.hash(pass, salt)
+//         const data = new adminCol({
+//             adminId: "yoga@admin",
+//             adminPassword: hash
+//         })
+
+//         await data.save()
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+// addAdmin()
+
+
 
 web.listen(PORT, () => console.log(`Server listening at port number ${PORT}`))
