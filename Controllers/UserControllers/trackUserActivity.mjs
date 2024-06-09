@@ -1,3 +1,4 @@
+import contactCol from "../../Models/contactUs.mjs";
 import premiumCol from "../../Models/premiumModel.mjs";
 import userCol from "../../Models/userModel.mjs";
 import yogaCol from "../../Models/yogaContentModel.mjs";
@@ -130,5 +131,19 @@ export const payment = async (req, res) => {
         sendMail(req.params.mailId, req.file)
     } catch (error) {
         console.error(`Payment Error : ${error}`)
+    }
+}
+
+export const contactUs = async (req, res) => {
+    try {
+        const { firstName, email, phno, message } = req.body;
+        const data = new contactCol({
+            firstName, email, phno, message
+        })
+
+        const response = await data.save()
+        !response ? res.status(200).send(true) : res.status(200).send(false)
+    } catch (error) {
+        console.error(`Contact Us error --> ${error}`)
     }
 }
