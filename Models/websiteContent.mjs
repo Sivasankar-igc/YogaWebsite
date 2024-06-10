@@ -33,21 +33,10 @@ const homePageSchema = mongoose.Schema({
 })
 
 const aboutPageSchema = mongoose.Schema({
-    headImage: String,
-    content: {
-        heading: String,
-        description: String
-    },
-    studioShowCase: {
-        heading: String,
-        subHeading: String,
-        studioInsides: [
-            {
-                name: String,
-                image: String
-            }
-        ]
-    }
+    heading: String,
+    subHeading: String,
+    description: String,
+    image: String
 })
 
 const contactPageSchema = mongoose.Schema({

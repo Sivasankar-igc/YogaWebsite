@@ -10,11 +10,9 @@ import { getPremiumDetails } from "./Controllers/OtherControllers/getPremiumDeta
 import { getHomePageContents, getAboutPageContents, getContactPageContents } from "./Controllers/OtherControllers/getWebsiteContents.mjs"
 import cookieParser from "cookie-parser";
 
-import bcryptjs from "bcryptjs"
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import adminCol from "./Models/adminModel.mjs";
 
 const web = express();
 const PORT = process.env.PORT || 8000;
@@ -35,6 +33,8 @@ mongoose.connect(process.env.MONGODB_URI)
 setInterval(handleStreakUpdation, 3600000); // ```To handle the streak updation of all user
 
 web.use("/homePageImages", express.static("./HomePageImage"))
+web.use("/aboutPageImages", express.static("./AboutPageImage"))
+web.use("/yogaInstructorImages", express.static("./YogaInstructorImage"))
 
 web.use("/api/user", userRouter);
 web.use("/api/admin", adminRouter);
@@ -45,14 +45,14 @@ web.get("/api/getAboutPageContents", getAboutPageContents)
 web.get("/api/getContactPageContents", getContactPageContents)
 
 
-web.use(express.static(path.join(__dirname, "./dist")))
-web.get("*", (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "./dist/index.html"))
-    } catch (error) {
-        console.error(`Server error : couldn't get clientside files --> ${error}`)
-    }
-})
+// web.use(express.static(path.join(__dirname, "./dist")))
+// web.get("*", (req, res) => {
+//     try {
+//         res.sendFile(path.join(__dirname, "./dist/index.html"))
+//     } catch (error) {
+//         console.error(`Server error : couldn't get clientside files --> ${error}`)
+//     }
+// })
 
 
 // const addAdmin = async (req, res) => {

@@ -4,7 +4,8 @@ import { addYogaContent, deleteComment, deleteYogaContent, modifyYogaContent } f
 import { banUserPermanent, banUserTemporary, getAllUser } from "../Controllers/AdminControllers/handleUser.mjs";
 import { addPremiumSection, managePremiumSection, removePremiumSection } from "../Controllers/AdminControllers/handlePremium.mjs";
 import { modifyAboutPage, modifyContactPage, modifyHomePage } from "../Controllers/AdminControllers/handleWebsiteContents.mjs";
-import { uploadHomePage } from "../utils/uploadImage.mjs";
+import { uploadAboutPage, uploadHomePage } from "../utils/uploadImage.mjs";
+import { addYogaInstructor, getYogaInstructor, modifyYogaInstructor, removeYogaInstructor } from "../Controllers/AdminControllers/handleYogaInstructor.mjs";
 
 const router = express.Router();
 
@@ -33,12 +34,23 @@ router.put("/modifyPremium", managePremiumSection);
 router.delete("/removePremium/:premiumName", removePremiumSection);
 
 
+// HANDLE YOGA INSTRUCTOR INFOS
+
+router.get("/getYogaInstructor", getYogaInstructor)
+router.post("/addYogaInstructor", addYogaInstructor)
+router.delete("/removeYogaInstructor/:id", removeYogaInstructor)
+router.put("/modifyYogaInstructor/:id", modifyYogaInstructor)
+
+
 // HANDLE WEBSITE CONTENT
 
 router.put("/modifyHomePage/:id", modifyHomePage);
 router.put("/modifyAboutPage/:id", modifyAboutPage);
 router.put("/modifyContactPage/:id", modifyContactPage);
 router.put("/uploadHomePageImage", uploadHomePage.single("file"), async (req, res) => {
+    req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
+})
+router.put("/uploadAboutPageImage", uploadAboutPage.single("file"), async (req, res) => {
     req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
 })
 

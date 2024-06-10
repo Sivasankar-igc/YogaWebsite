@@ -33,11 +33,22 @@ export const modifyHomePage = async (req, res) => {
 export const modifyAboutPage = async (req, res) => {
     try {
         const id = req.params.id;
-        const { headImage, content, studioShowCase } = req.body;
-        const response = await aboutPageCol.findByIdAndUpdate( id , {
-            headImage: headImage,
-            content: content,
-            studioShowCase: studioShowCase
+        const { _id, heading, subHeading, description, image } = req.body.contentData;
+        const response = await aboutPageCol.findByIdAndUpdate(id, {
+            heading: heading,
+            subHeading: subHeading,
+            description: description,
+            image: image
+        })
+
+        fs.readdir("../server/AboutPageImage", (error, files) => {
+            for (const file of files) {
+                if (file !== image) {
+                    fs.unlink(`../server/AboutPageImage/${file}`, (err) => {
+                        if (err) console.error(`Error --> ${err}`)
+                    })
+                }
+            }
         })
 
         response ? res.status(200).json({ status: true, message: response }) : res.status(200).json({ status: false, message: null })
@@ -49,8 +60,8 @@ export const modifyAboutPage = async (req, res) => {
 export const modifyContactPage = async (req, res) => {
     try {
         const id = req.params.id;
-        const {_id,  heading, description, email, phno, location } = req.body.contentData;
-        const response = await contactPageCol.findByIdAndUpdate( id , {
+        const { _id, heading, description, email, phno, location } = req.body.contentData;
+        const response = await contactPageCol.findByIdAndUpdate(id, {
             heading: heading,
             description: description,
             email: email,

@@ -20,6 +20,23 @@ const homePageStorage = multer.diskStorage({
     }
 })
 
+const aboutPageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "../server/AboutPageImage")
+    },
+    filename: (req, file, cb) => {
+        cb(null, "aboutpage" + Date.now() + path.extname(file.originalname))
+    }
+})
+
+const yogaInstructorStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "../server/YogaInstructorImage")
+    },
+    filename: (req, file, cb) => {
+        cb(null, "yogaInstructor_" + Date.now() + path.extname(file.originalname))
+    }
+})
 
 export const uploadPayment = multer({
     storage: paymentStorage
@@ -27,4 +44,12 @@ export const uploadPayment = multer({
 
 export const uploadHomePage = multer({
     storage: homePageStorage
+})
+
+export const uploadAboutPage = multer({
+    storage: aboutPageStorage
+})
+
+export const uploadYogaInstructor = multer({
+    storage: yogaInstructorStorage
 })
