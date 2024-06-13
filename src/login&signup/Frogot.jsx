@@ -31,7 +31,7 @@ const ForgotPassword = () => {
         <div className="grid grid-cols-12 h-full">
           <div className="col-span-12 lg:col-span-6 lg:col-start-7 order-2">
             <div
-              className="hidden lg:block h-full w-full lg:w-[50vw] bg-cover bg-center bg-no-repeat float-left"
+              className="h-screen hidden lg:block h-full w-full lg:w-[50vw] bg-cover bg-center bg-no-repeat float-left"
               style={{
                 backgroundImage:
                   "url('forgot.jpeg')",
@@ -74,13 +74,13 @@ const ForgotPassword = () => {
                     </button>
                   </form>
                 )}
-                <div className="relative mt-6">
+                {/* <div className="relative mt-6">
                   <hr className="my-8 border-t border-gray-300" />
                   <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
                     Or
                   </span>
                 </div>
-                <SocialLoginButton />
+                <SocialLoginButton /> */}
               </div>
             </div>
           </div>

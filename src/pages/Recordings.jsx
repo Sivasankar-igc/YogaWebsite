@@ -141,22 +141,22 @@ const Recordings = ({ userType }) => {
   };
   return (
     status === statusCode.IDLE &&
-    <section className="ezy__eporder9 gray py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900 dark:text-white relative overflow-hidden z-10">
+    <section className="ezy__eporder9 gray py-14 md:py-24 bg-white  text-zinc-900 relative overflow-hidden z-10">
       <div className="container px-4 mx-auto">
         <div className="flex justify-center max-w-6xl mx-auto">
-          <div className="bg-gray-100 dark:bg-slate-800 border dark:border-slate-700 rounded w-full">
+          <div className="bg-gray-100  rounded w-full">
             <div className="text-center md:text-end bg-transparent p-4 md:p-6 lg:p-8">
               {userType === "admin" && <button
                 onClick={() => {
                   setCurrentVideo(null);
                   setShowModal(true);
                 }}
-                className="bg-transparent hover:bg-[#779393] hover:text-white border dark:border-white hover:border-[#779393] dark:hover:border-[#779393] rounded py-2 px-6 ml-2"
+                className="bg-transparent hover:bg-[#779393] hover:text-white border  hover:border-[#779393]  rounded py-2 px-6 ml-2"
               >
                 Add Video
               </button>}
             </div>
-            <hr className="dark:border-slate-700" />
+            <hr className="" />
 
             {videos.map((item, index) => (
               <div key={item._id} className="p-6 md:p-12">

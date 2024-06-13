@@ -5,7 +5,7 @@ export default () => {
           label: "Resources",
           items: [
               {
-                  href: 'javascript:void()',
+                  href: 'admin/contacts',
                   name: 'contact'
               },
               {
@@ -43,57 +43,57 @@ export default () => {
               },
           ]
       },
-      {
-          label: "Explore",
-          items: [
-              {
-                  href: 'javascript:void()',
-                  name: 'Showcase'
-              },
-              {
-                  href: 'javascript:void()',
-                  name: 'Roadmap'
-              },
-              {
-                  href: 'javascript:void()',
-                  name: 'Languages'
-              },
-              {
-                  href: 'javascript:void()',
-                  name: 'Blog'
-              },
-          ]
-      },
-      {
-          label: "Company",
-          items: [
-              {
-                  href: 'javascript:void()',
-                  name: 'Partners'
-              },
-              {
-                  href: 'javascript:void()',
-                  name: 'Team'
-              },
-              {
-                  href: 'javascript:void()',
-                  name: 'Careers'
-              },
-          ],
-      }
+    //   {
+    //       label: "Explore",
+    //       items: [
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Showcase'
+    //           },
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Roadmap'
+    //           },
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Languages'
+    //           },
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Blog'
+    //           },
+    //       ]
+    //   },
+    //   {
+    //       label: "Company",
+    //       items: [
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Partners'
+    //           },
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Team'
+    //           },
+    //           {
+    //               href: 'javascript:void()',
+    //               name: 'Careers'
+    //           },
+    //       ],
+    //   }
   ]
 
   return (
       <footer className="pt-10">
           <div className="max-w-screen-xl mx-auto px-4 md:px-8">
-              <div className="justify-between items-center gap-12 md:flex">
+              {/* <div className="justify-between items-center gap-12 md:flex">
                   <div className="flex-1 max-w-lg">
                       <h3 className="text-2xl font-bold">
                           Get our beautiful newsletter straight to your inbox.
                       </h3>
                   </div>
                   <div className="flex-1 mt-6 md:mt-0">
-                      {/* <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-x-3 md:justify-end">
+                      <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-x-3 md:justify-end">
                           <div className="relative">
                               <svg className="w-6 h-6 text-gray-400 absolute left-3 inset-y-0 my-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -108,10 +108,11 @@ export default () => {
                           <button className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">
                               Subscribe
                           </button>
-                      </form> */}
+                      </form>
                   </div>
-              </div>
-              <div className="flex-1 mt-16 space-y-6 justify-between sm:flex md:space-y-0">
+              </div> */}
+              <div className="flex-1 mt-16 space-y-6 justify-end gap-48 sm:flex md:space-y-0">
+                <img src="logo2.svg" alt="" className="object-contain w-[30rem] h-[40] flex opacity-70"/>
                   {
                       footerNavs.map((item, idx) => (
                           <ul
