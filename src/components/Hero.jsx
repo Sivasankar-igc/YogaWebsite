@@ -6,7 +6,7 @@ const Hero = ({ userType }) => {
   const { data } = useSelector(state => state.homepage)
   return (
     <section className="ezy__header7 light py-14 md:py-24 bg-white  text-zinc-900  mx-10">
-      <div className="container px-4 mx-auto relative">
+      <div className="container mx-auto relative">
         <div className="grid grid-cols-12 gap-6 gap-y-16 lg:gap-y-0">
           <div className="col-span-12 lg:col-span-7 text-center lg:text-start">
             <div className="flex flex-col justify-center h-full">

@@ -29,21 +29,20 @@ In conclusion, Iyengar Yoga offers a comprehensive, deeply therapeutic, and incl
 };
 
 const BlogsDetails = () => {
-  let { title } = useParams();
+  let { title, description } = useParams();
 
-  const essay = BlogsEssays[title] || "Essay not found for this class.";
-  const paragraphs = essay.split("\n\n").map((paragraph, index) => (
-    <p key={index} className="mb-4">
-      {paragraph}
-    </p>
-  ));
-
+  // const essay = BlogsEssays[title] || "Essay not found for this class.";
+  // const paragraphs = essay.split("\n\n").map((paragraph, index) => (
+  //   <p key={index} className="mb-4">
+  //     {paragraph}
+  //   </p>
+  // ));
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <Pageinfo name={title} prevpage={"blogs"} />
       <div className="py-4 w-[80%]">
         <h2 className="text-2xl font-semibold mb-4">About {title}</h2>
-        {paragraphs}
+        {description}
       </div>
     </div>
   );

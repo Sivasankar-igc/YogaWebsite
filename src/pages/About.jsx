@@ -14,7 +14,7 @@ const About = () => {
         <img
           src={"http://localhost:8000/aboutPageImages/" + data.image}
           alt=""
-          className="border-[20px] border-white dark:border-slate-800 shadow-xl rounded-full mx-auto"
+          className="h-1/2 w-1/2  border-[5px] border-white  shadow-xl rounded-full mx-auto"
         />
       </div>
       <Aboutteam props={data} />

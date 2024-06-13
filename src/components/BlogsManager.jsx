@@ -4,7 +4,6 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import blogCol from "../../../server/Models/blogModel.mjs";
 import { useDispatch, useSelector } from "react-redux";
 import { addBlog, modifyBlog, removeBlog } from "../REDUX_COMPONENTS/FEATURES/blogSlice.mjs";
 import { toast } from "react-toastify";

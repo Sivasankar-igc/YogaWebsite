@@ -118,7 +118,7 @@ const SignInForm = () => {
       </div>
       <button
         onClick={() => handleLogin("user")}
-        className="bg-[#779393] text-white py-3 px-6 rounded w-full"
+        className="bg-[#779393] text-white py-3 px-6 rounded w-full mb-5"
       >
         Log In
       </button>
@@ -134,14 +134,14 @@ const SignInForm = () => {
       >
         Forget your password?
       </button>
-      <div className="relative">
+      {/* <div className="relative">
         <hr className="my-8 border-t border-gray-300" />
         <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
           Or
         </span>
       </div>
 
-      <SocialLoginButton />
+      <SocialLoginButton /> */}
     </form>
   );
 };
@@ -423,15 +423,6 @@ const SignUpForm = () => {
       >
         Sign Up
       </button>
-
-      <div className="relative">
-        <hr className="my-6 md:my-12" />
-        <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
-          Or
-        </span>
-      </div>
-
-      <SocialLoginButton />
     </form>
   );
 };
@@ -445,7 +436,7 @@ const SignInSignUp = () => {
         <div className="grid grid-cols-12 h-full">
           <div className="col-span-12 lg:col-span-6 lg:col-start-7 order-2">
             <div
-              className="hidden lg:block h-full w-full lg:w-[50vw] bg-cover bg-center bg-no-repeat float-left"
+              className="min-h-screen h-full hidden lg:block  w-full lg:w-[50vw] bg-cover bg-center bg-no-repeat float-left"
               style={{
                 backgroundImage: "url('model.jpeg')",
               }}

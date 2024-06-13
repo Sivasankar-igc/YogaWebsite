@@ -18,19 +18,19 @@ export default () => {
                         </p>
                     </div>
                     <div className="mt-12">
-                        <ul className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+                        <ul className=" grid gap-8 sm:grid-cols-2 md:grid-cols-3">
                             {
                                 instructorData.map((item, idx) => (
-                                    <li key={idx}>
+                                    <li key={idx} className="w-full flex flex-col items-center justify-center">
                                         <div className="w-full h-90 sm:h-50 md:h-90">
                                             <img
                                                 src={item.image}
-                                                className="w-[19rem] h-[19rem] object-cover object-center shadow-md rounded-xl"
+                                                className="w-full h-[19rem] object-cover object-center shadow-md rounded-xl"
                                                 alt=""
                                             />
                                         </div>
-                                        <div className="mt-4 it">
-                                            <h4 className="text-lg text-gray-700 font-semibold text-center">{item.name}</h4>
+                                        <div className="mt-4 w-full flex flex-col items-center justify-center ">
+                                            <h4 className="text-lg text-gray-700 font-semibold ">{item.name}</h4>
 
                                             <div className="mt-3 flex gap-4 text-gray-400  justify-center ">
                                                 <a href={item.socialMediaLinks.twitter}>

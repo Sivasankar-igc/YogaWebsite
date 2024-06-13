@@ -71,13 +71,13 @@ export default () => {
         </div>
         <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 w-[80%]">
           {filteredPosts.map((item, key) => (
-            <Link to={`${item.title}`}>
+            <Link to={`${item.title}/${item.description}`}>
               <article
                 className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
                 key={item._id}
               >
                 <img
-                  src={item.indexImage}
+                  src={`/${item.indexImage}`}
                   loading="lazy"
                   alt={item.title}
                   className="w-full h-48 rounded-t-md object-cover"
@@ -85,7 +85,7 @@ export default () => {
                 <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
                   <div className="flex-none w-10 h-10 rounded-full">
                     <img
-                      src={item.authorImage}
+                      src={`/${item.authorImage}`}
                       className="w-full h-full rounded-full"
                       alt={item.author}
                     />
