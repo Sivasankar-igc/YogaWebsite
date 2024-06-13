@@ -136,13 +136,13 @@ export const payment = async (req, res) => {
 
 export const contactUs = async (req, res) => {
     try {
-        const { firstName, email, phno, message } = req.body;
+        const { fullName, email, phno, message } = req.body.contactFormData;
         const data = new contactCol({
-            firstName, email, phno, message
+            fullName, email, phno, message
         })
 
         const response = await data.save()
-        !response ? res.status(200).send(true) : res.status(200).send(false)
+        response ? res.status(200).send(true) : res.status(200).send(false)
     } catch (error) {
         console.error(`Contact Us error --> ${error}`)
     }

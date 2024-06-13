@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const yogaInstructorSchema = mongoose.Schema({
     name: String,
     image: String,
-    descripttion: String,
+    description: String,
     socialMediaLinks: {
         twitter: String,
         facebook: String,
@@ -12,4 +12,5 @@ const yogaInstructorSchema = mongoose.Schema({
 })
 
 const yogaInstructorCol = new mongoose.model("yogaInstructorInfos", yogaInstructorSchema)
+
 export default yogaInstructorCol

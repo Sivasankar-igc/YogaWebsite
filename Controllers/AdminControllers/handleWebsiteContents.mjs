@@ -15,6 +15,7 @@ export const modifyHomePage = async (req, res) => {
         })
 
         fs.readdir("../server/HomePageImage", (error, files) => {
+        // fs.readdir("../HomePageImage", (error, files) => {
             for (const file of files) {
                 if (!images.includes(file)) {
                     fs.unlink(`../server/HomePageImage/${file}`, (err) => {
@@ -42,6 +43,7 @@ export const modifyAboutPage = async (req, res) => {
         })
 
         fs.readdir("../server/AboutPageImage", (error, files) => {
+        // fs.readdir("../server/AboutPageImage", (error, files) => {
             for (const file of files) {
                 if (file !== image) {
                     fs.unlink(`../server/AboutPageImage/${file}`, (err) => {
@@ -74,23 +76,3 @@ export const modifyContactPage = async (req, res) => {
         console.error(`Server error : contactpage modification error --> ${error}`)
     }
 }
-
-
-
-const addHomePage = async (req, res) => {
-    try {
-
-        const data = new contactPageCol({
-            heading: "Let us know how we can help",
-            description: "We’re here to help and answer any question you might have, We look forward to hearing from you! Please fill out the form, or us the contact information bellow.",
-            email: "Support@example.com",
-            phno: "+1 (555) 000-000",
-            location: "Mountain View, California, United State."
-        })
-
-        const res = await data.save()
-    } catch (error) {
-        console.error(error)
-    }
-}
-// addHomePage()

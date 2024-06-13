@@ -40,7 +40,7 @@ export const removeYogaInstructor = async (req, res) => {
 
         const response = await yogaInstructorCol.findByIdAndDelete(id)
 
-        response ? res.status(200).json({ status: true }) : res.status(200).json({ status: false })
+        response ? res.status(200).send(true) : res.status(200).send(false)
     } catch (error) {
         console.error(`Server error : removing yoga instructor --> ${error}`)
     }

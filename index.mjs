@@ -13,6 +13,8 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { getVideoContents } from "./Controllers/OtherControllers/getVideoContents.mjs";
+import getBlogContents from "./Controllers/OtherControllers/getBlogContents.mjs";
 
 const web = express();
 const PORT = process.env.PORT || 8000;
@@ -43,6 +45,8 @@ web.get("/api/getPremiumDetails", getPremiumDetails)
 web.get("/api/getHomePageContents", getHomePageContents)
 web.get("/api/getAboutPageContents", getAboutPageContents)
 web.get("/api/getContactPageContents", getContactPageContents)
+web.get("/api/getVideoContents", getVideoContents)
+web.get("/api/getBlogContents", getBlogContents)
 
 
 // web.use(express.static(path.join(__dirname, "./dist")))

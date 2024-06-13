@@ -6,6 +6,7 @@ import { addPremiumSection, managePremiumSection, removePremiumSection } from ".
 import { modifyAboutPage, modifyContactPage, modifyHomePage } from "../Controllers/AdminControllers/handleWebsiteContents.mjs";
 import { uploadAboutPage, uploadHomePage } from "../utils/uploadImage.mjs";
 import { addYogaInstructor, getYogaInstructor, modifyYogaInstructor, removeYogaInstructor } from "../Controllers/AdminControllers/handleYogaInstructor.mjs";
+import { addBlog, modifyBlog, removeBlog } from "../Controllers/AdminControllers/handleBlog.mjs";
 
 const router = express.Router();
 
@@ -40,6 +41,13 @@ router.get("/getYogaInstructor", getYogaInstructor)
 router.post("/addYogaInstructor", addYogaInstructor)
 router.delete("/removeYogaInstructor/:id", removeYogaInstructor)
 router.put("/modifyYogaInstructor/:id", modifyYogaInstructor)
+
+
+// HANDLE BLOG CONTENTS
+
+router.post("/addBlog", addBlog)
+router.put("/modifyBlog/:id", modifyBlog)
+router.delete("/removeBlog/:id", removeBlog)
 
 
 // HANDLE WEBSITE CONTENT

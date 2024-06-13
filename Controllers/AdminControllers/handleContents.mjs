@@ -18,7 +18,7 @@ export const addYogaContent = async (req, res) => {
             indexImage: indexImage
         })
         const response = await data.save();
-        response && res.status(200).send(response)
+        response ? res.status(200).json({ status: true, message: response }) : res.status(200).json({ status: false, message: null })
     } catch (error) {
         console.error(`Server error : adding yoga content --> ${error}`)
     }
@@ -27,9 +27,11 @@ export const addYogaContent = async (req, res) => {
 export const modifyYogaContent = async (req, res) => {
     try {
         const id = req.params.id;
-        const { contentLink, indexImage, description } = req.body;
+        const { contentHeading, contentLink, indexImage, description } = req.body;
+        console.log(req.body)
         const response = await yogaCol.findByIdAndUpdate(id, {
             $set: {
+                contentHeading: contentHeading,
                 contentLink: contentLink,
                 description: description,
                 indexImage: indexImage
@@ -46,7 +48,7 @@ export const deleteYogaContent = async (req, res) => {
     try {
         const id = req.params.id;
         const response = await yogaCol.findByIdAndDelete(id)
-        response !== null ? res.status(200).send(true) : res.status(200).send(false)
+        response ? res.status(200).send(true) : res.status(200).send(false)
     } catch (error) {
         console.error(`Server Error : deleting yoga content --> ${error}`)
     }
