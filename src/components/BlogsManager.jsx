@@ -3,69 +3,62 @@ import Pageinfo from "./Pageinfo";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import blogCol from "../../../server/Models/blogModel.mjs";
+import { useDispatch, useSelector } from "react-redux";
+import { addBlog, modifyBlog, removeBlog } from "../REDUX_COMPONENTS/FEATURES/blogSlice.mjs";
+import { toast } from "react-toastify";
+import { statusCode } from "../utils/statusFile.mjs";
 
 export default () => {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "The Journey into Yoga: A Beginner's Guide",
-      desc: "Discover the transformative power of yoga with our beginner's guide. Learn the basics, from poses to breathing techniques, and start your journey towards balance and wellness.",
-      img: "/cart (1).jpeg",
-      authorLogo: "avat (1).jpeg",
-      authorName: "Mrunal Thakur",
-      date: "Apr 18 2024",
-      href: "#",
-    },
-    {
-      id: 2,
-      title: "Yoga for Mindfulness: Finding Inner Peace",
-      desc: "Explore the practice of mindfulness through yoga. Our article delves into techniques that help you connect with the present moment and achieve a state of inner peace.",
-      img: "/cart (2).jpeg",
-      authorLogo: "/avat (2).jpeg",
-      authorName: "Ritik Ranjan",
-      date: "Apr 25 2024",
-      href: "#",
-    },
-    {
-      id: 3,
-      title: "Yoga at Home: Creating Your Sacred Space",
-      desc: "Learn how to create a sacred space for your yoga practice at home. We provide tips on setting the right atmosphere to enhance your yoga experience.",
-      img: "/cart (3).jpeg",
-      authorLogo: "/avat (3).jpeg",
-      authorName: "Siva Sankar",
-      date: "May 2 2024",
-      href: "#",
-    },
-    {
-      id: 4,
-      title: "The Healing Power of Yoga: A Wellness Approach",
-      desc: "Yoga is not just a physical exercise; it's a healing journey. This article discusses the wellness benefits of yoga and how it promotes physical and mental healing.",
-      img: "/cart (4).jpeg",
-      authorLogo: "/avat (4).jpeg",
-      authorName: "Lipsa Devi",
-      date: "May 9 2024",
-      href: "#",
-    },
-  ]);
+
+  const { status, data: blogs } = useSelector(state => state.blog)
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editClassData, setEditClassData] = useState(null);
   const [showMore, setShowMore] = useState({});
+  const dispatch = useDispatch()
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPosts = blogs.filter((blog) =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSavePost = (post) => {
     if (editClassData) {
-      setPosts(posts.map((p) => (p.id === post.id ? post : p)));
+      axios.put(`admin/modifyBlog/${post._id}`, { author: post.author, title: post.title, description: post.description, indexImage: post.indexImage, authorImage: post.authorImage })
+        .then(res => {
+          const { status, message } = res.data;
+          if (status) {
+            dispatch(modifyBlog(post))
+            toast("Blog modified successfully!!!")
+          } else {
+            toast("Something went wrong!!!")
+          }
+        })
+        .catch(err => {
+          console.error(`Cientside error : blog modification --> ${err}`)
+          toast("Network connection error!!!")
+        })
     } else {
-      setPosts([...posts, { ...post, id: posts.length + 1 }]);
+      axios.post("admin/addBlog", { author: post.author, authorImage: post.authorImage, indexImage: post.indexImage, title: post.title, description: post.description })
+        .then(res => {
+          const { status, message } = res.data;
+          if (status) {
+            dispatch(addBlog(message))
+            toast("Blog added successfully!!!")
+          } else {
+            toast("Something went wrong!!!")
+          }
+        })
+        .catch(err => {
+          console.error(`Clientside error : adding blog --> ${err}`)
+          toast("Network connection error!!!")
+        })
     }
     setEditClassData(null);
     setShowModal(false);
@@ -77,7 +70,21 @@ export default () => {
   };
 
   const handleDeleteClass = (postId) => {
-    setPosts(posts.filter((post) => post.id !== postId));
+    if (postId) {
+      axios.delete(`admin/removeBlog/${postId}`)
+        .then(res => {
+          if (res.data) {
+            dispatch(removeBlog(postId))
+            toast("Blog Removed Successfully!!!")
+          } else {
+            toast("Something went wrong!!!")
+          }
+        })
+        .catch(err => {
+          console.error(`Clientside error : removing blog --> ${err}`)
+          toast("Network connection error!!!")
+        })
+    }
   };
 
   const handleCloseModal = () => {
@@ -93,104 +100,112 @@ export default () => {
   };
 
   return (
-    <section className="mt-12 mx-auto px-4 max-w-screen-xl md:px-8">
-      <div className="text-center">
-        <p className="mt-3 text-gray-500">
-          Blogs that are loved by the community. Updated every hour.
-        </p>
-        <input
-          type="text"
-          placeholder="Search posts..."
-          className="mt-5 p-3 border rounded-md"
-          onChange={handleSearchChange}
-        />
-      </div>
-      <div className="flex justify-end">
-        <button
-          className="bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9]"
-          onClick={() => setShowModal(true)}
-        >
-          Add
-        </button>
-      </div>
-      <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredPosts.map((item) => (
-          <article
-            className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
-            key={item.id}
+    status === statusCode.IDLE
+      ? <section className="mt-12 mx-auto px-4 max-w-screen-xl md:px-8">
+        <div className="text-center">
+          <p className="mt-3 text-gray-500">
+            Blogs that are loved by the community. Updated every hour.
+          </p>
+          <input
+            type="text"
+            placeholder="Search posts..."
+            className="mt-5 p-3 border rounded-md"
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9]"
+            onClick={() => setShowModal(true)}
           >
-            <a href={item.href}>
+            Add
+          </button>
+        </div>
+        <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredPosts.map((item) => (
+            <article
+              className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
+              key={item._id}
+            >
               <img
-                src={item.img}
+                src={`/${item.indexImage}`}
                 loading="lazy"
                 alt={item.title}
                 className="w-full h-48 rounded-t-md object-cover"
               />
               <div className="flex justify-end p-2">
-                <FaEdit onClick={() => handleEditButtonClick(item)} />
-                <MdDelete onClick={() => handleDeleteClass(item.id)} />
+                <FaEdit onClick={() => handleEditButtonClick(item)} style={{ cursor: "pointer" }} />
+                <MdDelete onClick={() => handleDeleteClass(item._id)} style={{ cursor: "pointer" }} />
               </div>
               <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
                 <div className="flex-none w-10 h-10 rounded-full">
                   <img
-                    src={item.authorLogo}
+                    src={`/${item.authorImage}`}
                     className="w-full h-full rounded-full"
-                    alt={item.authorName}
+                    alt={item.author}
                   />
                 </div>
                 <div className="ml-3">
-                  <span className="block text-gray-900">{item.authorName}</span>
-                  <span className="block text-gray-400 text-sm">{item.date}</span>
+                  <span className="block text-gray-900">{item.author}</span>
+                  <span className="block text-gray-400 text-sm">{item.postedAt.date}</span>
                 </div>
               </div>
               <div className="pt-3 ml-4 mr-2 mb-3">
                 <h3 className="text-xl text-gray-900">{item.title}</h3>
                 <p className="text-gray-400 text-sm mt-1">
-                  {showMore[item.id] ? item.desc : `${item.desc.substring(0, 100)}...`}
+                  {showMore[item.id] ? item.desc : `${item.description.substring(0, 100)}...`}
                   <Link to={`${item.title}`}> <button
-                    onClick={() => toggleShowMore(item.id)}
+                    onClick={() => toggleShowMore(item._id)}
                     className="text-blue-500"
                   >
-                    {showMore[item.id] ? " Show Less" : " Show More"}
+                    {showMore[item._id] ? " Show Less" : " Show More"}
                   </button></Link>
                 </p>
               </div>
-            </a>
-          </article>
-          
-        ))}
-        
-      </div>
-      {showModal && (
-        <Modal
-          onClose={handleCloseModal}
-          onSave={handleSavePost}
-          classData={editClassData}
-        />
-      )}
-      
-    </section>
-    
+            </article>
+          ))}
+
+        </div>
+        {showModal && (
+          <Modal
+            onClose={handleCloseModal}
+            onSave={handleSavePost}
+            classData={editClassData}
+          />
+        )}
+
+      </section>
+      : status === statusCode.LOADING
+        ? <p>Loading....</p>
+        : status === statusCode.EMPTY
+          ? <p>Nothing to show here</p>
+          : <p>Something went wrong!!!</p>
   );
 };
 
 // Define the Modal component here or import it if it's already defined elsewhere
 const Modal = ({ onClose, onSave, classData }) => {
   const [formData, setFormData] = useState({
-    id: classData ? classData.id : null,
+    _id: classData ? classData._id : "",
     title: classData ? classData.title : '',
-    desc: classData ? classData.desc : '',
-    img: classData ? classData.img : '',
-    authorLogo: classData ? classData.authorLogo : '',
-    authorName: classData ? classData.authorName : '',
-    date: classData ? classData.date : '',
-    href: classData ? classData.href : '#',
+    description: classData ? classData.description : '',
+    indexImage: classData ? classData.indexImage : '',
+    authorImage: classData ? classData.authorImage : '',
+    author: classData ? classData.author : '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleImage = (e) => {
+    const { name, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files[0].name
+    })
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -216,30 +231,39 @@ const Modal = ({ onClose, onSave, classData }) => {
           <div className="mb-4">
             <label className="block text-gray-700">Description</label>
             <textarea
-              name="desc"
-              value={formData.desc}
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Image </label>
+            <label className="block text-gray-700">Blog Image</label>
             <input
               type="file"
-              name="img"
+              name="indexImage"
+              onChange={handleImage}
+              className="w-full p-2 border rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Author Name</label>
+            <textarea
+              name="author"
+              value={formData.author}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
               required
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Link URL</label>
+            <label className="block text-gray-700">Author Image</label>
             <input
-              type="text"
-              name="href"
-              value={formData.href}
-              onChange={handleChange}
+              type="file"
+              name="authorImage"
+              onChange={handleImage}
               className="w-full p-2 border rounded-md"
               required
             />

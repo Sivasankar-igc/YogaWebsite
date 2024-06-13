@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addVideo, updateVideo } from "../features/videosSlice";
-import { deleteVideo } from "../features/videosSlice";
-
+import { addVideo, updateVideo, deleteVideo } from "../REDUX_COMPONENTS/FEATURES/videosSlice.js"
+import { statusCode } from "../utils/statusFile.mjs";
 const AddVideo = ({ forClose, video }) => {
   const modelref = useRef();
   const closeModel = (e) => {
@@ -43,7 +42,6 @@ const AddVideo = ({ forClose, video }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newVideo = {
-      id: video ? video.id : new Date().getTime(), // Use video id if editing, otherwise create a new id
       heading: name,
       videoLink: link,
       description,
@@ -131,8 +129,8 @@ const AddVideo = ({ forClose, video }) => {
   );
 };
 
-const Recordings = ({userType}) => {
-  const videos = useSelector((state) => state.videos);
+const Recordings = ({ userType }) => {
+  const { data: videos, status } = useSelector((state) => state.videos);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
@@ -141,14 +139,14 @@ const Recordings = ({userType}) => {
     setCurrentVideo(video);
     setShowModal(true);
   };
-
   return (
+    status === statusCode.IDLE &&
     <section className="ezy__eporder9 gray py-14 md:py-24 bg-white dark:bg-[#0b1727] text-zinc-900 dark:text-white relative overflow-hidden z-10">
       <div className="container px-4 mx-auto">
         <div className="flex justify-center max-w-6xl mx-auto">
           <div className="bg-gray-100 dark:bg-slate-800 border dark:border-slate-700 rounded w-full">
             <div className="text-center md:text-end bg-transparent p-4 md:p-6 lg:p-8">
-            {userType ==="admin" &&  <button
+              {userType === "admin" && <button
                 onClick={() => {
                   setCurrentVideo(null);
                   setShowModal(true);
@@ -156,16 +154,16 @@ const Recordings = ({userType}) => {
                 className="bg-transparent hover:bg-[#779393] hover:text-white border dark:border-white hover:border-[#779393] dark:hover:border-[#779393] rounded py-2 px-6 ml-2"
               >
                 Add Video
-              </button>} 
+              </button>}
             </div>
             <hr className="dark:border-slate-700" />
 
             {videos.map((item, index) => (
-              <div key={item.id} className="p-6 md:p-12">
+              <div key={item._id} className="p-6 md:p-12">
                 <div className="grid grid-cols-12 text-center lg:text-start">
                   <div className="col-span-12 lg:col-span-4">
                     <div>
-                      <a href={item.link}>
+                      <a href={item.videoLink}>
                         <img
                           src={item.image}
                           alt=""
@@ -176,8 +174,8 @@ const Recordings = ({userType}) => {
                   </div>
                   <div className="col-span-12 lg:col-span-6 lg:pl-6 mt-4 lg:mt-0">
                     <div>
-                      <a href={item.link}>
-                        <h2 className="text-3xl hover:text-blue-600 font-bold mb-2">
+                      <a href={item.videoLink}>
+                        <h2 className="text-3xl hover:text-blue-600 font-bold mb-2 cursor-pointer">
                           {item.heading}
                         </h2>
                       </a>
@@ -187,26 +185,6 @@ const Recordings = ({userType}) => {
                     </div>
                   </div>
                   <div className="col-span-12 lg:col-span-2">
-                    {/* <div
-                      onClick={() => handleToggleCompleted(item.id)}
-                      className="flex items-start justify-center h-full cursor-pointer"
-                    >
-                      <span
-                        className={`text-center w-full max-w-[250px] py-2 px-6 rounded-md text-base ${
-                          item.completed
-                            ? "text-green-600 bg-[#d2ffd2]"
-                            : "text-blue-600 bg-blue-600 bg-opacity-10"
-                        }`}
-                      >
-                        {item.completed ? "Completed" : "Mark as completed"}
-                      </span>
-                    </div> */}
-                    {/* <button
-                      onClick={() => handleEdit(item)}
-                      className="bg-transparent hover:bg-[#779393] hover:text-white border dark:border-white hover:border-[#779393] dark:hover:border-[#779393] rounded py-2 px-6 ml-2"
-                    >
-                      Edit
-                    </button> */}
                     {userType === "admin" && <div className="flex flex-col gap-5">
                       <div className="col-span-12 lg:col-span-2">
                         <div

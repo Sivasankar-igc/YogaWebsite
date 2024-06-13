@@ -22,7 +22,7 @@ const TypesOfClasses = () => {
       <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {
           displayedYog.map((item, index) => (
-            <Link to={`${item.contentHeading}`}>
+            <Link to={`${item.contentHeading}/${item.description}`}>
               <article
                 className="max-w-md mx-auto mt-4  rounded-md duration-300  hover:shadow-lg"
                 key={item.contentId}

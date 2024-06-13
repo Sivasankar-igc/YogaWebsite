@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default () => {
 
     const { data: premiumData, status } = useSelector(state => state.premium)
-    const {data:homepagedata} = useSelector(state=>state.homepage)
+    const { data: homepagedata } = useSelector(state => state.homepage)
     const nav = useNavigate();
 
 

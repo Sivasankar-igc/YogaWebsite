@@ -6,6 +6,7 @@ import { modifyHomePage } from "../REDUX_COMPONENTS/FEATURES/homePageSlice.mjs";
 import { modifyContactPage } from "../REDUX_COMPONENTS/FEATURES/contactPageSlice.mjs";
 import { modifyAboutPage } from "../REDUX_COMPONENTS/FEATURES/aboutPageSlice.mjs";
 import { useNavigate } from "react-router-dom";
+import YogaInstructorHandler from "./yogaInstructorForm";
 
 const handleImageUploading = async (e, route) => {
   const { files } = e.target;
@@ -218,7 +219,7 @@ const HomePageForm = () => {
   };
 
   const dispatch = useDispatch();
-const navigate = useNavigate()
+  const navigate = useNavigate()
   const handleSubmit = (data) => {
     data.e.preventDefault();
     setIsLoading(true);
@@ -232,7 +233,7 @@ const navigate = useNavigate()
           dispatch(CBMethod(message));
           setIsLoading(false);
           toast("Homepage modification successful!!!");
-        navigate('/admin')
+          navigate('/admin')
         } else {
           toast(`Couldn't modify the ${route}!!!`);
           setIsLoading(false);
@@ -243,7 +244,7 @@ const navigate = useNavigate()
         toast("Network connection error ");
         setIsLoading(false);
       });
-    
+
   };
 
   return (
@@ -260,13 +261,10 @@ const navigate = useNavigate()
                     id: data._id,
                     contentData: homePageData,
                     CBMethod: modifyHomePage,
-                  
+
                   })
                 }
               >
-                <h2 className="text-xl font-semibold text-center">
-                  Hero Section
-                </h2>
                 {isLoading && <div> Loading...</div>}
                 {Object.keys(inputFieldCollection).map((inputFieldKey) => (
                   <div
@@ -278,6 +276,9 @@ const navigate = useNavigate()
                       //   borderBottom: "3px solid black",
                     }}
                   >
+                    <h2 className="text-xl font-semibold text-center my-5">
+                      {inputFieldKey.toUpperCase()}
+                    </h2>
                     {inputFieldCollection[inputFieldKey].map((field, index) =>
                       field.type === "file" ? (
                         <div className="">
@@ -300,7 +301,7 @@ const navigate = useNavigate()
                                   inputFieldKey
                                 )
                               }
-                             
+
                             />
                             <img
                               className="h-[15rem] w-[15rem] rounded-md "
@@ -647,10 +648,12 @@ export const WebsiteManagementForm = () => {
         <button onClick={() => handleButtonClick('home')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Home</button>
         <button onClick={() => handleButtonClick('contact')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Contacts</button>
         <button onClick={() => handleButtonClick('about')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit About</button>
+        <button onClick={() => handleButtonClick('yogainstructor')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Yoga Instructor</button>
       </div>
       {activeComponent === 'home' && <HomePageForm />}
       {activeComponent === 'contact' && <ContactPageForm />}
       {activeComponent === 'about' && <AboutPageForm />}
+      {activeComponent === 'yogainstructor' && <YogaInstructorHandler />}
     </div>
   );
 };

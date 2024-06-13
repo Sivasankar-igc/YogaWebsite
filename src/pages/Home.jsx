@@ -9,7 +9,7 @@ const Home = ({userType}) => {
   return (
     <div>
 
-      <Hero userType={userType} />
+      <Hero userType={userType} /> 
       <TypesOfYoga />
       <Place />
       <TypesOfClasses />

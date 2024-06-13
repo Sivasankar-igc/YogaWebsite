@@ -20,9 +20,10 @@ const yogaContentSlice = createSlice({
         },
         modifyYogaContent(state, action) {
             
-            let { contentId, contentLink, indexImage, description } = action.payload; // FROM ADMIN SIDE THE MODIFIED CONTENT'S contentId, contentLink, indexImage and description of the content will be provided
+            let { contentId, contentHeading, contentLink, indexImage, description } = action.payload; // FROM ADMIN SIDE THE MODIFIED CONTENT'S contentId, contentLink, indexImage and description of the content will be provided
             let tempData = state.data.find(content => content.contentId === contentId)
             if (tempData) {
+                tempData.contentHeading = contentHeading;
                 tempData.contentLink = contentLink;
                 tempData.indexImage = indexImage;
                 tempData.description = description;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Pageinfo from "./Pageinfo";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux"
+import { statusCode } from "../utils/statusFile.mjs";
 
 export default () => {
   const [posts] = useState([
@@ -43,38 +45,39 @@ export default () => {
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const { status, data: blogs } = useSelector(state => state.blog)
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPosts = blogs.filter((blog) =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="flex flex-col justify-center items-center w-full">
-      <div className="text-center">
-        <p className="mt-3 text-gray-500">
-          Blogs that are loved by the community. Updated every hour.
-        </p>
-        <input
-          type="search"
-          placeholder="Search posts..."
-          className="mt-5 p-3 border rounded-md"
-          onChange={handleSearchChange}
-        />
-      </div>
-      <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 w-[80%]">
-        {filteredPosts.map((item, key) => (
-          <Link to={`${item.title}`}>
-            <article
-              className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
-              key={key}
-            >
-              <a href={item.href}>
+    status === statusCode.IDLE
+      ? <div className="flex flex-col justify-center items-center w-full">
+        <div className="text-center">
+          <p className="mt-3 text-gray-500">
+            Blogs that are loved by the community. Updated every hour.
+          </p>
+          <input
+            type="search"
+            placeholder="Search posts..."
+            className="mt-5 p-3 border rounded-md"
+            onChange={handleSearchChange}
+          />
+        </div>
+        <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 w-[80%]">
+          {filteredPosts.map((item, key) => (
+            <Link to={`${item.title}`}>
+              <article
+                className="max-w-md mx-auto mt-4 shadow-lg border rounded-md duration-300 hover:shadow-sm"
+                key={item._id}
+              >
                 <img
-                  src={item.img}
+                  src={item.indexImage}
                   loading="lazy"
                   alt={item.title}
                   className="w-full h-48 rounded-t-md object-cover"
@@ -82,29 +85,33 @@ export default () => {
                 <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
                   <div className="flex-none w-10 h-10 rounded-full">
                     <img
-                      src={item.authorLogo}
+                      src={item.authorImage}
                       className="w-full h-full rounded-full"
-                      alt={item.authorName}
+                      alt={item.author}
                     />
                   </div>
                   <div className="ml-3">
                     <span className="block text-gray-900">
-                      {item.authorName}
+                      {item.author}
                     </span>
                     <span className="block text-gray-400 text-sm">
-                      {item.date}
+                      {item.postedAt.date}
                     </span>
                   </div>
                 </div>
                 <div className="pt-3 ml-4 mr-2 mb-3">
                   <h3 className="text-xl text-gray-900">{item.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">{item.desc}</p>
+                  <p className="text-gray-400 text-sm mt-1">{item.description}</p>
                 </div>
-              </a>
-            </article>
-          </Link>
-        ))}
+              </article>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+      : status === statusCode.LOADING
+        ? <p>Loading...</p>
+        : status === statusCode.EMPTY
+          ? <p>Nothing to show here!!!</p>
+          : <p>Something went wrong!!!</p>
   );
 };

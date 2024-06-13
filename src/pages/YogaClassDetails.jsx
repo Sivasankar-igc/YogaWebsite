@@ -1,6 +1,6 @@
 import React from "react";
 import Pageinfo from "../components/Pageinfo";
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 
 const classEssays = {
   "Hatha Yoga": `Hatha Yoga, often considered the foundation of all yoga styles, is an ancient practice that harmonizes the body, mind, and spirit. The word “Hatha” is derived from two Sanskrit roots: “Ha,” meaning sun, and “Tha,” meaning moon. This signifies the balance of the masculine aspects—active, hot, sun—and feminine aspects—receptive, cool, moon—within all of us. Hatha Yoga aims to achieve a state of equilibrium and unity between these opposing forces.
@@ -29,21 +29,15 @@ In conclusion, Iyengar Yoga offers a comprehensive, deeply therapeutic, and incl
 };
 
 const YogaClassDetails = () => {
-  let { title } = useParams();
+  let { title, description } = useParams();
 
-  const essay = classEssays[title] || "Essay not found for this class.";
-  const paragraphs = essay.split("\n\n").map((paragraph, index) => (
-    <p key={index} className="mb-4">
-      {paragraph}
-    </p>
-  ));
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <Pageinfo name={title} prevpage={"classes"} />
       <div className="py-4 w-[80%]">
         <h2 className="text-2xl font-semibold mb-4">About {title}</h2>
-        {paragraphs}
+        {description}
       </div>
     </div>
   );

@@ -1,11 +1,14 @@
 import { useSelector } from "react-redux";
 import Pageinfo from "../components/Pageinfo";
+import { useState } from "react";
+import axios from "axios"
+import { toast } from "react-toastify";
 
 
 
 export default () => {
     const { data } = useSelector(state => state.contactpage)
-console.log(data)
+
     const contactMethods = [
         {
             icon:
@@ -33,6 +36,54 @@ console.log(data)
             contact: data.location
         },
     ]
+
+    const [contactFormData, setContactFormData] = useState({
+        fullName: "",
+        email: "",
+        phno: "",
+        message: ""
+    })
+
+    const handleFormData = (e) => {
+        const { name, value } = e.target;
+        setContactFormData({
+            ...contactFormData,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        axios.post("user/contactUs", { contactFormData })
+            .then(res => {
+                
+                if (res.data) {
+                    toast("Message submission successful!!!")
+                    setContactFormData({
+                        fullName: "",
+                        email: "",
+                        phno: "",
+                        message: ""
+                    })
+                }
+                else {
+                    toast("Something went wrong!!!. Message couldn't be sent.")
+                }
+            })
+            .catch(err => {
+                console.error(`Clientside error : contact us error --> ${err}`)
+                toast("Network connection error!!!");
+            })
+
+        setContactFormData({
+            fullName: "",
+            email: "",
+            phno: "",
+            message: ""
+        })
+
+    }
 
     return (
         <main className="flex flex-col justify-center items-center w-full">
@@ -66,7 +117,7 @@ console.log(data)
                     </div>
                     <div className="flex-1 mt-12 sm:max-w-lg lg:max-w-md">
                         <form
-                            onSubmit={(e) => e.preventDefault()}
+                            onSubmit={handleSubmit}
                             className="space-y-5"
                         >
                             <div>
@@ -74,6 +125,9 @@ console.log(data)
                                     Full name
                                 </label>
                                 <input
+                                    name="fullName"
+                                    onChange={handleFormData}
+                                    value={contactFormData.fullName}
                                     type="text"
                                     required
                                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -84,6 +138,9 @@ console.log(data)
                                     Email
                                 </label>
                                 <input
+                                    name="email"
+                                    onChange={handleFormData}
+                                    value={contactFormData.email}
                                     type="email"
                                     required
                                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -94,6 +151,9 @@ console.log(data)
                                     Phone Number
                                 </label>
                                 <input
+                                    name="phno"
+                                    onChange={handleFormData}
+                                    value={contactFormData.phno}
                                     type="text"
                                     required
                                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -103,11 +163,12 @@ console.log(data)
                                 <label className="font-medium">
                                     Message
                                 </label>
-                                <textarea required className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"></textarea>
+                                <textarea name="message" onChange={handleFormData} value={contactFormData.message} required className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"></textarea>
                             </div>
                             <button
                                 className="w-full bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9] transition duration-300
                                 "
+                                type="submit"
                             >
                                 Submit
                             </button>

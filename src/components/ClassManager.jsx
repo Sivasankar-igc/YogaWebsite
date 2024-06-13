@@ -10,10 +10,12 @@ import axios from "axios";
 import { toast } from "react-toastify"
 
 function Modal({ onclose, onSave, classData }) {
+
   const [formData, setFormData] = useState({
-    title: "",
-    desc: "",
-    img: "",
+    contentHeading: classData ? classData.contentHeading : "",
+    description: classData ? classData.description : "",
+    indexImage: classData ? classData.indexImage : "",
+    contentLink: classData ? classData.contentLink : ""
   });
 
   useEffect(() => {
@@ -59,8 +61,8 @@ function Modal({ onclose, onSave, classData }) {
             <label className="font-medium">Name</label>
             <input
               type="text"
-              name="title"
-              value={formData.title}
+              name="contentHeading"
+              value={formData.contentHeading}
               onChange={handleChange}
               required
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -70,10 +72,11 @@ function Modal({ onclose, onSave, classData }) {
           <div>
             <label className="font-medium">Recordings</label>
             <input
-              type="file"
-              name="recording"
-              onChange={handleFileChange}
-              className="block w-full border shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-[#779393] file:border-0 file:mr-4 file:py-2 file:px-4"
+              type="text"
+              name="contentLink"
+              value={formData.contentLink}
+              onChange={handleChange}
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
           </div>
 
@@ -81,7 +84,7 @@ function Modal({ onclose, onSave, classData }) {
             <label className="font-medium">Image</label>
             <input
               type="file"
-              name="img"
+              name="indexImage"
               onChange={handleFileChange}
               className="block w-full border shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-[#779393] file:border-0 file:mr-4 file:py-2 file:px-4"
             />
@@ -90,8 +93,8 @@ function Modal({ onclose, onSave, classData }) {
           <div>
             <label className="font-medium">Description</label>
             <textarea
-              name="desc"
-              value={formData.desc}
+              name="description"
+              value={formData.description}
               onChange={handleChange}
               required
               className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
@@ -108,42 +111,83 @@ function Modal({ onclose, onSave, classData }) {
 }
 
 const ClassManager = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [editClassData, setEditClassData] = useState(null);
   const { data: classes } = useSelector((state) => state.yogacontent);
+  const { data: homepagedata } = useSelector(state => state.homepage);
+
   const dispatch = useDispatch();
 
+  const [showModal, setShowModal] = useState(false);
+  const [editClassData, setEditClassData] = useState(null);
+
+
   const handleAddClass = (newClass) => {
-    dispatch(addYogaContent(newClass));
-    setShowModal(false);
+    if (newClass) {
+      axios.post("admin/addContent", { contentHeading: newClass.contentHeading, contentLink: newClass.contentLink, description: newClass.description, indexImage: newClass.indexImage })
+        .then(res => {
+          const { status, message } = res.data;
+          if (status) {
+            dispatch(addYogaContent(message))
+            toast("Content added successfully!!!")
+            setShowModal(false);
+          } else {
+            toast("Soemthing went wrong!!!")
+            setShowModal(false);
+          }
+        })
+        .catch(err => {
+          console.error(`Clientside error : adding yoga content --> ${err}`)
+          toast("Network connection error!!!")
+        })
+    }
+
   };
 
   const handleEditClass = (editedClass) => {
-console.log(editClassData)
     axios.put(`admin/modifyContent/${editedClass._id}`, {
+      contentHeading: editedClass.contentHeading,
       contentLink: editedClass.contentLink,
       indexImage: editedClass.indexImage,
       description: editedClass.description
     })
       .then(res => {
-        res.data === true
-          ? dispatch(modifyYogaContent(editedClass))
-          : toast("Something went wrong!!!")
+        if (res.data === true) {
+          dispatch(modifyYogaContent(editedClass))
+          toast("Content Modified successfully!!!")
+          setEditClassData(null)
+        } else {
+          toast("Something went wrong!!!")
+          setEditClassData(null)
+        }
       })
       .catch(err => {
         console.error(`Error while updating the content details --> ${err}`)
         toast("Network connection error!!!")
+        setEditClassData(null);
       })
-    setEditClassData(null);
   };
 
   const handleDeleteClass = (id) => {
-    dispatch(deleteClass(id));
+    if (id) {
+      axios.delete(`admin/removeContent/${id}`)
+        .then(res => {
+          if (res.data === true) {
+            dispatch(removeYogaContent(id))
+            toast("Content Removed successfully!!!")
+            setShowModal(false);
+          } else {
+            toast("Something went wrong!!!")
+            setShowModal(false);
+          }
+        })
+        .catch(err => {
+          console.error(`Clientside error : removing yoga content --> ${err}`)
+          toast("Network connection error!!!")
+        })
+    }
   };
 
   const handleEditButtonClick = (yogaClass) => {
     setEditClassData(yogaClass);
-    setShowModal(true);
   };
 
   const displayedClasses = classes.slice();
@@ -152,10 +196,10 @@ console.log(editClassData)
     <section className="mt-12 mx-auto px-4 max-w-screen-xl md:px-8">
       <div className="text-center">
         <h1 className="text-3xl text-gray-800 font-semibold">
-          Popular Classes
+          {homepagedata.yogaTypeShowCase.heading}
         </h1>
         <p className="mt-3 text-gray-500">
-          Mind and Body practice with origins in ancient Indian Philosophy
+          {homepagedata.yogaTypeShowCase.subHeading}
         </p>
       </div>
       <div className="flex justify-end">
@@ -169,12 +213,12 @@ console.log(editClassData)
       <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {displayedClasses.map((item) => (
           < article
-            key={item.id}
+            key={item.contentId}
             className="max-w-md mx-auto mt-4 rounded-md duration-300 hover:shadow-lg"
           >
             <div className="flex justify-end">
-              <FaEdit onClick={() => handleEditButtonClick(item)} />
-              <MdDelete onClick={() => handleDeleteClass(item.id)} />
+              <FaEdit onClick={() => handleEditButtonClick(item)} style={{ cursor: "pointer" }} />
+              <MdDelete onClick={() => handleDeleteClass(item._id)} style={{ cursor: "pointer" }} />
             </div>
             <Link to={`${item.contentHeading}`}>
               <img

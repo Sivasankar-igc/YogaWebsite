@@ -6,6 +6,9 @@ import adminSlice from "../FEATURES/adminSlice.mjs";
 import homePageSlice from "../FEATURES/homePageSlice.mjs";
 import contactPageSlice from "../FEATURES/contactPageSlice.mjs";
 import aboutPageSlice from "../FEATURES/aboutPageSlice.mjs";
+import yogaInstructorSlice from "../FEATURES/yogaInstructorSlice.mjs";
+import videosSlice from "../FEATURES/videosSlice";
+import blogSlice from "../FEATURES/blogSlice.mjs";
 
 const store = configureStore({
     reducer: {
@@ -15,7 +18,10 @@ const store = configureStore({
         admin: adminSlice,
         homepage: homePageSlice,
         contactpage: contactPageSlice,
-        aboutpage: aboutPageSlice
+        aboutpage: aboutPageSlice,
+        yogainstructor: yogaInstructorSlice,
+        videos:videosSlice,
+        blog:blogSlice
     }
 })
 
