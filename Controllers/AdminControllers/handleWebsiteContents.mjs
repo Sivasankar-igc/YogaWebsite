@@ -4,7 +4,7 @@ import fs from "fs";
 export const modifyHomePage = async (req, res) => {
     try {
         const { _id, heroSection, yogaTypeShowCase, yogaStudioShowCase, yogaInstructorShowCase, pricingShowCase } = req.body.contentData;
-        const images = [heroSection.image, yogaStudioShowCase.image]
+        // const images = [heroSection.image, yogaStudioShowCase.image]
 
         const response = await homePageCol.findByIdAndUpdate(_id, {
             heroSection: heroSection,
@@ -14,17 +14,17 @@ export const modifyHomePage = async (req, res) => {
             pricingShowCase: pricingShowCase
         })
 
-        fs.readdir("../server/HomePageImage", (error, files) => {
-        // fs.readdir("../HomePageImage", (error, files) => {
-            for (const file of files) {
-                if (!images.includes(file)) {
-                    fs.unlink(`../server/HomePageImage/${file}`, (err) => {
-                        if (err) console.error(`Error --> ${err}`)
-                    })
-                }
-            }
-        })
-
+        // fs.readdir("../server/HomePageImage", (error, files) => {
+        //     // fs.readdir("../HomePageImage", (error, files) => {
+        //     for (const file of files) {
+        //         if (!images.includes(file)) {
+        //             fs.unlink(`../server/HomePageImage/${file}`, (err) => {
+        //                 if (err) console.error(`Error --> ${err}`)
+        //             })
+        //         }
+        //     }
+        // })
+        
         response ? res.status(200).json({ status: true, message: response }) : res.status(200).json({ status: false, message: null })
     } catch (error) {
         console.error(`Server error : homepage modification error --> ${error}`)
@@ -42,16 +42,16 @@ export const modifyAboutPage = async (req, res) => {
             image: image
         })
 
-        fs.readdir("../server/AboutPageImage", (error, files) => {
         // fs.readdir("../server/AboutPageImage", (error, files) => {
-            for (const file of files) {
-                if (file !== image) {
-                    fs.unlink(`../server/AboutPageImage/${file}`, (err) => {
-                        if (err) console.error(`Error --> ${err}`)
-                    })
-                }
-            }
-        })
+        //     // fs.readdir("../server/AboutPageImage", (error, files) => {
+        //     for (const file of files) {
+        //         if (file !== image) {
+        //             fs.unlink(`../server/AboutPageImage/${file}`, (err) => {
+        //                 if (err) console.error(`Error --> ${err}`)
+        //             })
+        //         }
+        //     }
+        // })
 
         response ? res.status(200).json({ status: true, message: response }) : res.status(200).json({ status: false, message: null })
     } catch (error) {

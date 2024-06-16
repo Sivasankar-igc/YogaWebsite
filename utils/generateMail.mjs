@@ -12,19 +12,25 @@ const transporter = Nodemailer.createTransport({
     }
 })
 
-export const sendMail = (mailId, image) => {
+export const sendMail = (mailId, phno, image, contentDetails) => {
     const mailOptions = {
         from: {
-            name: "PROHUB",
+            name: "YOGAWITHMANOJ",
             address: process.env.SENDER_EMAIL_ACCOUNT
         },
-        to: mailId,
+        to: "prohub.consult06@gmail.com",
         subject: "Payment Verification",
-        html: `<h1>EmailId : ${mailId}</h1>`,
+        html: `
+        <h1>EmailId : ${mailId}</h1>
+        <h1>WhatsApp Number : ${phno}</h1>
+        <h1>Premium Name : ${contentDetails.premiumName}</h1>
+        <h1>Premium Price : ${contentDetails.premiumPrice}</h1>
+        
+        `,
         attachments: [
             {
                 fileName: "image",
-                path: `./PaymentImages/${image.filename}`
+                path: `${image}`
             }
         ]
     }
@@ -33,9 +39,28 @@ export const sendMail = (mailId, image) => {
         if (error) {
             console.error(`Server Error : mail couldn't be sent--> ${error}`);
         } else {
-            fs.unlink(`./PaymentImages/${image.filename}`, (err) => {
-                if (err) console.error(`Error ${err}`)
-            })
+           return true
+        }
+    });
+
+}
+
+export const sendOTP_to_mail = (mailId, OTP) => {
+    const mailOptions = {
+        from: {
+            name: "YOGAWITHMANOJ",
+            address: process.env.SENDER_EMAIL_ACCOUNT
+        },
+        to: mailId,
+        subject: "OTP Verification",
+        html: `<h2>Validate Your Mail Address</h2>
+        <h4>Your 6-character OTP is : ${OTP}</h4>`,
+    }
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(`Server Error : mail couldn't be sent--> ${error}`);
+        } else {
         }
     });
 

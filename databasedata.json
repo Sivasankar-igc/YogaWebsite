@@ -1,0 +1,47 @@
+[
+    {
+        "postedAt": {
+            "time": "10:38:5AM",
+            "date": "13 Jun 2024"
+        },
+        "_id": {
+            "$oid": "666a7eb5dfbfb288a38c7c35"
+        },
+        "author": "Unknown",
+        "authorImage": "Yogini.png",
+        "indexImage": "pic1.jpg",
+        "title": "New Blog2",
+        "description": "Why am I posting this???",
+        "__v": 0
+    },
+    {
+        "postedAt": {
+            "time": "10:48:9AM",
+            "date": "13 Jun 2024"
+        },
+        "_id": {
+            "$oid": "666a8111cd405803443cb2ed"
+        },
+        "author": "The Most Depressed Author",
+        "authorImage": "cart (4).jpeg",
+        "indexImage": "pic1.jpg",
+        "title": "Old Blog 3",
+        "description": "Still not in mood to write something",
+        "__v": 0
+    },
+    {
+        "postedAt": {
+            "time": "10:49:29AM",
+            "date": "13 Jun 2024"
+        },
+        "_id": {
+            "$oid": "666a8161cd405803443cb2f0"
+        },
+        "author": "The Commercial Coder",
+        "authorImage": "pic1.jpg",
+        "indexImage": "cart (3).jpeg",
+        "title": "Old but new blog 46",
+        "description": "Don't ever ask to write otherwise I will cry  ",
+        "__v": 0
+    }
+]

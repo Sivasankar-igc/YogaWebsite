@@ -28,7 +28,7 @@ export const modifyYogaContent = async (req, res) => {
     try {
         const id = req.params.id;
         const { contentHeading, contentLink, indexImage, description } = req.body;
-        console.log(req.body)
+        
         const response = await yogaCol.findByIdAndUpdate(id, {
             $set: {
                 contentHeading: contentHeading,

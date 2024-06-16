@@ -118,12 +118,12 @@ export const logout = async (req, res) => {
 export const getUserDetails = async (req, res) => {
     try {
         const token = req.cookies.benifitsofyogawithmanoj;
-        if (!token) {
+        if (token) {
             const verifiedToken = jwt.verify(token, JWT_SECRET);
-            const user = await userCollections.findOne({ _id: verifiedToken.tokenId });
-            user ? res.status(200).send(user) : res.status(200).send(false)
+            const user = await userCol.findOne({ _id: verifiedToken.tokenId });
+            user ? res.status(200).json({ status: true, message: user }) : res.status(200).json({ status: false, message: null })
         } else {
-            res.status(200).send(false)
+            res.status(200).json({ status: false, message: null })
         }
     } catch (error) {
         console.error(`Server error : couldn't retrieve user details --> ${error}`)

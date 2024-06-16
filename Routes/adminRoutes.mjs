@@ -7,6 +7,7 @@ import { modifyAboutPage, modifyContactPage, modifyHomePage } from "../Controlle
 import { uploadAboutPage, uploadHomePage } from "../utils/uploadImage.mjs";
 import { addYogaInstructor, getYogaInstructor, modifyYogaInstructor, removeYogaInstructor } from "../Controllers/AdminControllers/handleYogaInstructor.mjs";
 import { addBlog, modifyBlog, removeBlog } from "../Controllers/AdminControllers/handleBlog.mjs";
+import { addVideo, modifyVideo, removeVideo } from "../Controllers/AdminControllers/handleVideo.mjs";
 
 const router = express.Router();
 
@@ -48,6 +49,13 @@ router.put("/modifyYogaInstructor/:id", modifyYogaInstructor)
 router.post("/addBlog", addBlog)
 router.put("/modifyBlog/:id", modifyBlog)
 router.delete("/removeBlog/:id", removeBlog)
+
+
+// HANDLE VIDOE CONTENTS
+
+router.post("/addVideo", addVideo)
+router.put("/modifyVideo/:id", modifyVideo)
+router.delete("/removeVideo/:id", removeVideo)
 
 
 // HANDLE WEBSITE CONTENT

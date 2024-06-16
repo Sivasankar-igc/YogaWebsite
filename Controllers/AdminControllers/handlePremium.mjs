@@ -2,7 +2,6 @@ import premiumCol from "../../Models/premiumModel.mjs";
 
 export const addPremiumSection = async (req, res) => {
     try {
-        console.log("hello")
         const { premiumName, premiumPeriod, premiumPrice, discount, backgroundImage, premiumFeatures } = req.body;
         const data = new premiumCol({
             premiumName: premiumName,
@@ -25,18 +24,16 @@ export const addPremiumSection = async (req, res) => {
     }
 }
 
-export const managePremiumSection = async () => {
+export const managePremiumSection = async (req, res) => {
     try {
-        const { oldPremiumName, updatedPremiumName, premiumPeriod, premiumPrice, discount, backgroundImage } = req.body;
+        const { oldPremiumName, updatedPremiumName, premiumPrice, premiumFeatures } = req.body;
 
         const response = await premiumCol.updateOne({ premiumName: oldPremiumName },
             {
                 $set: {
                     premiumName: updatedPremiumName,
-                    premiumPeriod: premiumPeriod,
                     premiumPrice: premiumPrice,
-                    discount: discount,
-                    backgroundImage: backgroundImage
+                    premiumFeatures: premiumFeatures
                 }
             }
         )

@@ -27,6 +27,7 @@ export const addBlog = async (req, res) => {
 export const modifyBlog = async (req, res) => {
     try {
         const id = req.params.id;
+        
         const { author, title, description, indexImage, authorImage } = req.body;
         const response = await blogCol.findByIdAndUpdate(id, {
             $set: {
