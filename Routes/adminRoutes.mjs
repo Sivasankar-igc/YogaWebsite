@@ -63,11 +63,11 @@ router.delete("/removeVideo/:id", removeVideo)
 router.put("/modifyHomePage/:id", modifyHomePage);
 router.put("/modifyAboutPage/:id", modifyAboutPage);
 router.put("/modifyContactPage/:id", modifyContactPage);
-router.put("/uploadHomePageImage", uploadHomePage.single("file"), async (req, res) => {
-    req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
-})
-router.put("/uploadAboutPageImage", uploadAboutPage.single("file"), async (req, res) => {
-    req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
-})
+// router.put("/uploadHomePageImage", uploadHomePage.single("file"), async (req, res) => {
+//     req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
+// })
+// router.put("/uploadAboutPageImage", uploadAboutPage.single("file"), async (req, res) => {
+//     req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
+// })
 
 export { router }

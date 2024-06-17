@@ -28,6 +28,6 @@ router.put("/like/:contentId", likeVideo)
 router.put("/dislike/:contentId", disLikeVideo)
 router.post("/addComment", addComment)
 
-router.post("/payment/:mailId", uploadPayment.single("file"), payment)
+router.post("/payment/:mailId", payment)
 router.post("/contactUs", contactUs)
 export { router }

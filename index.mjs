@@ -60,6 +60,7 @@ web.get("/api/getVideoContents", getVideoContents)
 web.get("/api/getBlogContents", getBlogContents)
 
 
+// TO SERVER THE DIST FOLDER AS STATIC FOLDER
 
 web.use(express.static(path.join(__dirname, "./dist")))
 web.get("*", (req, res) => {
