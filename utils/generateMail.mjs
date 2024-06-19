@@ -1,11 +1,10 @@
 import Nodemailer from "nodemailer";
-import fs from "fs"
 
 const transporter = Nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    // service: "gmail",
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    // secure: true,
     auth: {
         user: process.env.SENDER_EMAIL_ACCOUNT,
         pass: process.env.APP_PASSWORD
@@ -16,9 +15,9 @@ export const sendMail = (mailId, phno, image, contentDetails) => {
     const mailOptions = {
         from: {
             name: "YOGAWITHMANOJ",
-            address: process.env.SENDER_EMAIL_ACCOUNT
+            address: "khageswarsahoo12@gmail.com"
         },
-        to: "prohub.consult06@gmail.com",
+        to: "khageswarsahoo12@gmail.com",
         subject: "Payment Verification",
         html: `
         <h1>EmailId : ${mailId}</h1>
@@ -39,7 +38,7 @@ export const sendMail = (mailId, phno, image, contentDetails) => {
         if (error) {
             console.error(`Server Error : mail couldn't be sent--> ${error}`);
         } else {
-           return true
+            return true
         }
     });
 
