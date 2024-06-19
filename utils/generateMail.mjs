@@ -45,10 +45,11 @@ export const sendMail = (mailId, phno, image, contentDetails) => {
 }
 
 export const sendOTP_to_mail = (mailId, OTP) => {
+    
     const mailOptions = {
         from: {
             name: "YOGAWITHMANOJ",
-            address: process.env.SENDER_EMAIL_ACCOUNT
+            address: "khageswarsahoo12@gmail.com"
         },
         to: mailId,
         subject: "OTP Verification",
