@@ -129,8 +129,8 @@ export const addComment = async (req, res) => {
 export const payment = async (req, res) => {
     try {
         const mailId = req.params.mailId;
-        const { phno, image, contentDetails } = req.body;
-        const res = sendMail(mailId, phno, image, contentDetails)
+        const { username, phno, image, contentDetails } = req.body;
+        const res = sendMail(username, mailId, phno, image, contentDetails)
     } catch (error) {
         console.error(`Payment Error : ${error}`)
     }

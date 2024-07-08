@@ -1,17 +1,19 @@
 import Nodemailer from "nodemailer";
+import paymentTableCol from "../Models/paymentModel.mjs";
+import { generateDate } from "./generateDate.mjs";
 
 const transporter = Nodemailer.createTransport({
-    // service: "gmail",
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT,
-    // secure: true,
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.SENDER_EMAIL_ACCOUNT,
         pass: process.env.APP_PASSWORD
     }
 })
 
-export const sendMail = (mailId, phno, image, contentDetails) => {
+export const sendMail = (username, mailId, phno, image, contentDetails) => {
     const mailOptions = {
         from: {
             name: "YOGAWITHMANOJ",
@@ -34,18 +36,25 @@ export const sendMail = (mailId, phno, image, contentDetails) => {
         ]
     }
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, async function (error, info) {
         if (error) {
             console.error(`Server Error : mail couldn't be sent--> ${error}`);
         } else {
-            return true
+            const data = new paymentTableCol({
+                username,
+                userEmail: mailId,
+                dateOfPayment: generateDate(),
+                item: contentDetails.premiumName,
+                paymentImage: image
+            })
+            await data.save()
         }
     });
 
 }
 
 export const sendOTP_to_mail = (mailId, OTP) => {
-    
+
     const mailOptions = {
         from: {
             name: "YOGAWITHMANOJ",

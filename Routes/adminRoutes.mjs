@@ -8,6 +8,9 @@ import { uploadAboutPage, uploadHomePage } from "../utils/uploadImage.mjs";
 import { addYogaInstructor, getYogaInstructor, modifyYogaInstructor, removeYogaInstructor } from "../Controllers/AdminControllers/handleYogaInstructor.mjs";
 import { addBlog, modifyBlog, removeBlog } from "../Controllers/AdminControllers/handleBlog.mjs";
 import { addVideo, modifyVideo, removeVideo } from "../Controllers/AdminControllers/handleVideo.mjs";
+import { addPage, getPages, modifyPage, removePage } from "../Controllers/AdminControllers/handlePage.mjs";
+import { addFooter, getFooter, modifyFooter, removeFooter } from "../Controllers/AdminControllers/handleFooter.mjs";
+import getPaymentDetails from "../Controllers/AdminControllers/getPaymentDetails.mjs";
 
 const router = express.Router();
 
@@ -69,5 +72,21 @@ router.put("/modifyContactPage/:id", modifyContactPage);
 // router.put("/uploadAboutPageImage", uploadAboutPage.single("file"), async (req, res) => {
 //     req.file ? res.status(200).json({ status: true, message: req.file.filename }) : res.status(200).json({ status: false, message: null })
 // })
+
+
+// HANDLE NEW PAGES
+router.get("/getPage", getPages)
+router.post("/addPage", addPage)
+router.put("/modifyPage/:id", modifyPage)
+router.delete("/removePage/:id", removePage)
+
+// HANDLE FOOTER SECTION
+
+router.get("/getFooter", getFooter)
+router.post("/addFooter", addFooter)
+router.put("/modifyFooter/:id", modifyFooter)
+router.delete("/removeFooter/:id", removeFooter)
+
+router.get("/getPaymentDetails",getPaymentDetails)
 
 export { router }
