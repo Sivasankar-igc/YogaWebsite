@@ -19,7 +19,7 @@ const yogaContentSlice = createSlice({
             state.data.push(action.payload)
         },
         modifyYogaContent(state, action) {
-            
+
             let { contentId, contentHeading, contentLink, indexImage, description } = action.payload; // FROM ADMIN SIDE THE MODIFIED CONTENT'S contentId, contentLink, indexImage and description of the content will be provided
             let tempData = state.data.find(content => content.contentId === contentId)
             if (tempData) {
@@ -42,7 +42,7 @@ const yogaContentSlice = createSlice({
         builder
             .addCase(getYogaContents.fulfilled, (state, action) => {
                 state.data = action.payload.message;
-                state.status = action.payload.status ? statusCode.IDLE : statusCode.EMPTY
+                state.status = statusCode.IDLE
             })
             .addCase(getYogaContents.pending, (state, action) => {
                 state.status = statusCode.LOADING;

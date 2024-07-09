@@ -18,12 +18,13 @@ const yogaInstructorSlice = createSlice({
             state.data = state.data.filter(d => d._id !== action.payload);
         },
         modifyYogaInstructor: (state, action) => {
-            const { _id, name, image, description, socialMediaLinks } = action.payload;
+            const { _id, instructorDetails, socialMediaLinks } = action.payload;
+
             let tempData = state.data.find(d => d._id === _id)
             if (tempData) {
-                tempData.name = name;
-                tempData.image = image;
-                tempData.description = description;
+                tempData.name = instructorDetails.name
+                tempData.image = instructorDetails.image;
+                tempData.description = instructorDetails.description;
                 tempData.socialMediaLinks = socialMediaLinks;
             }
         }

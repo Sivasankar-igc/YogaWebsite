@@ -1,20 +1,24 @@
-import React from "react";
+import {React, useEffect }from "react";
 import Hero from "../components/Hero";
 import TypesOfYoga from "../components/TypesOfYoga";
 import Place from "../components/Place";
 import TypesOfClasses from "../components/TypesOfClasses";
 import Pricing from "../components/Pricing";
 import Instructor from "../components/Instructor";
-const Home = ({userType}) => {
+import { useSelector } from 'react-redux';
+import { statusCode } from '../utils/statusFile.mjs';
+import { Navigate, useNavigate } from 'react-router-dom';
+const Home = ({ userType }) => {
+
   return (
     <div>
 
-      <Hero userType={userType} /> 
+      <Hero userType={userType} />
       <TypesOfYoga />
       <Place />
-      <TypesOfClasses />
-      <Instructor/>
-      <Pricing/>
+      <TypesOfClasses userType={userType}/>
+      <Instructor />
+      <Pricing />
     </div>
   );
 };

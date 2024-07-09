@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { toast } from "react-toastify";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
 
 const SocialLoginButton = () => (
   <React.Fragment>
@@ -17,13 +20,47 @@ const SocialLoginButton = () => (
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("")
+  const [repass, setRepass] = useState("")
+  const [otp, setOTP] = useState("");
+  const [checkOTP, setCheckOTP] = useState("")
   const [submitted, setSubmitted] = useState(false);
+  const [isOTPCorrect, setIsOTPCorrect] = useState(false)
+  const nav = useNavigate()
 
-  const handleSubmit = (event) => {
+  const sendOTP = (event) => {
     event.preventDefault();
-    // Handle form submission, e.g., send reset link to the email
-    setSubmitted(true);
+    axios.get(`user/sendOTP/?mailId=${email}`)
+      .then(res => {
+        if (res.data !== "") {
+          setSubmitted(true)
+          setOTP(res.data)
+        } else {
+          toast("Something went wrong")
+        }
+      })
+      .catch(err => {
+        console.error(`Clientside error : couldn't retrieve OTP --> ${err}`)
+        toast("Network connection error")
+      })
   };
+
+  const handleOTPValidation = (e) => {
+    e.preventDefault()
+    otp === checkOTP ? setIsOTPCorrect(true) : toast("Wrong OTP")
+  }
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault()
+    if (password === repass) {
+      axios.post("user/resetPassword", { email, password })
+        .then(res => res.data ? nav("/login") : toast("Something went wrong"))
+        .catch(err => {
+          toast("Network connection error");
+          console.error(`Forgot password --> ${err}`)
+        })
+    } else toast("Password and confirm password must be same");
+  }
 
   return (
     <section className="ezy__forgot-password bg-white dark:bg-[#0b1727] text-zinc-900 dark:text-white overflow-hidden">
@@ -44,43 +81,79 @@ const ForgotPassword = () => {
                 <div className="text-center mb-6 lg:mb-12">
                   <h2 className="text-2xl font-bold">Forgot Password</h2>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Enter your email address and we'll send you a link to reset your password.
+                    Enter your email address and we'll send you an OTP to reset your password.
                   </p>
                 </div>
-                {submitted ? (
-                  <div className="text-center">
-                    <p className="text-green-600 dark:text-green-400">
-                      A reset link has been sent to your email address.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} noValidate>
-                    <div className="mb-4">
-                      <input
-                        type="email"
-                        className="w-full bg-blue-50 dark:bg-slate-700 min-h-[48px] leading-10 px-4 p-2 rounded-lg outline-none border border-transparent focus:border-blue-600"
-                        id="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="bg-indigo-900 text-white py-3 px-6 rounded w-full"
-                    >
-                      Send Reset Link
-                    </button>
-                  </form>
-                )}
-                {/* <div className="relative mt-6">
-                  <hr className="my-8 border-t border-gray-300" />
-                  <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
-                    Or
-                  </span>
-                </div>
-                <SocialLoginButton /> */}
+                {
+                  submitted ?
+                    isOTPCorrect
+                      ? <form onSubmit={handlePasswordSubmit} noValidate>
+                        <div className="mb-4">
+                          <input
+                            type="text"
+                            className="w-full bg-blue-50 dark:bg-slate-700 min-h-[48px] leading-10 px-4 p-2 rounded-lg outline-none border border-transparent focus:border-blue-600"
+                            id="password"
+                            placeholder="PASSWORD"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                          />
+                          <input
+                            type="password"
+                            className="w-full bg-blue-50 dark:bg-slate-700 min-h-[48px] leading-10 px-4 p-2 rounded-lg outline-none border border-transparent focus:border-blue-600"
+                            id="re-password"
+                            placeholder="RE-ENTER PASSWORD"
+                            value={repass}
+                            onChange={(e) => setRepass(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          className="bg-indigo-900 text-white py-3 px-6 rounded w-full"
+                        >
+                          Set New Password
+                        </button>
+                      </form>
+                      : <form onSubmit={handleOTPValidation} noValidate>
+                        <div className="mb-4">
+                          <input
+                            type="text"
+                            className="w-full bg-blue-50 dark:bg-slate-700 min-h-[48px] leading-10 px-4 p-2 rounded-lg outline-none border border-transparent focus:border-blue-600"
+                            id="otp"
+                            placeholder="OTP"
+                            value={checkOTP}
+                            onChange={(e) => setCheckOTP(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          className="bg-indigo-900 text-white py-3 px-6 rounded w-full"
+                        >
+                          Validate OTP
+                        </button>
+                      </form>
+                    : <form onSubmit={sendOTP} noValidate>
+                      <div className="mb-4">
+                        <input
+                          type="email"
+                          className="w-full bg-blue-50 dark:bg-slate-700 min-h-[48px] leading-10 px-4 p-2 rounded-lg outline-none border border-transparent focus:border-blue-600"
+                          id="email"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="bg-indigo-900 text-white py-3 px-6 rounded w-full"
+                      >
+                        Send OTP
+                      </button>
+                    </form>
+                }
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ const Err404 = () => {
       <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-start h-screen md:px-8">
         <div className="max-w-lg mx-auto flex-1 flex-row-reverse gap-12 items-center justify-between md:max-w-none md:flex">
           <div className="flex-1 max-w-lg">
-            <img src="public/sorry.jpeg" className=" rounded-3xl" />
+            <img src="https://res.cloudinary.com/daadcshli/image/upload/v1718634191/sorryImage_lnrkdb.jpg" className=" rounded-3xl" />
           </div>
           <div className="mt-12 flex-1 max-w-lg space-y-3 md:mt-0">
             <h3 className="text-6xl text-[#779393] font-semibold">

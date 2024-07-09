@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
 import Pageinfo from "./Pageinfo";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -127,7 +127,7 @@ export default () => {
               key={item._id}
             >
               <img
-                src={`/${item.indexImage}`}
+                src={item.indexImage}
                 loading="lazy"
                 alt={item.title}
                 className="w-full h-48 rounded-t-md object-cover"
@@ -139,7 +139,7 @@ export default () => {
               <div className="flex items-center mt-2 pt-3 ml-4 mr-2">
                 <div className="flex-none w-10 h-10 rounded-full">
                   <img
-                    src={`/${item.authorImage}`}
+                    src={item.authorImage}
                     className="w-full h-full rounded-full"
                     alt={item.author}
                   />
@@ -153,7 +153,7 @@ export default () => {
                 <h3 className="text-xl text-gray-900">{item.title}</h3>
                 <p className="text-gray-400 text-sm mt-1">
                   {showMore[item.id] ? item.desc : `${item.description.substring(0, 100)}...`}
-                  <Link to={`${item.title}`}> <button
+                  <Link to={`${item.title}/${item.description}`}> <button
                     onClick={() => toggleShowMore(item._id)}
                     className="text-blue-500"
                   >
@@ -193,6 +193,13 @@ const Modal = ({ onClose, onSave, classData }) => {
     author: classData ? classData.author : '',
   });
 
+
+  useEffect(() => {
+    console.log(formData)
+  })
+
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -200,12 +207,32 @@ const Modal = ({ onClose, onSave, classData }) => {
 
   const handleImage = (e) => {
     const { name, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files[0].name
-    })
-  }
+    setIsLoading(true)
 
+    const form = new FormData();
+    form.append("file", files[0]);
+    form.append("upload_preset", "foja3qaf")
+
+    axios.post("https://api.cloudinary.com/v1_1/daadcshli/image/upload", form)
+      .then(res => {
+        if (res.data) {
+          setFormData({
+            ...formData,
+            [name]: res.data.url
+          })
+          toast("Image Uploaded Successfully!!!")
+          setIsLoading(false)
+        } else {
+          toast("Something went wrong");
+          setIsLoading(false)
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        toast("Network connection error")
+        setIsLoading(false)
+      })
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -215,7 +242,7 @@ const Modal = ({ onClose, onSave, classData }) => {
     <div className="z-20 fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-md">
         <h2 className="text-lg font-bold mb-4">{classData ? 'Edit Post' : 'Add Post'}</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => { if (!isLoading) handleSubmit(e) }}>
           <div className="mb-4">
             <label className="block text-gray-700">Title</label>
             <input
@@ -242,9 +269,9 @@ const Modal = ({ onClose, onSave, classData }) => {
             <input
               type="file"
               name="indexImage"
+              accept=".png, .jpeg, .jpg"
               onChange={handleImage}
               className="w-full p-2 border rounded-md"
-              required
             />
           </div>
           <div className="mb-4">
@@ -262,9 +289,9 @@ const Modal = ({ onClose, onSave, classData }) => {
             <input
               type="file"
               name="authorImage"
+              accept=".png, .jpeg, .jpg"
               onChange={handleImage}
               className="w-full p-2 border rounded-md"
-              required
             />
           </div>
           <div className="flex justify-end">
@@ -276,7 +303,7 @@ const Modal = ({ onClose, onSave, classData }) => {
               Cancel
             </button>
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
-              Save
+              {!isLoading ? "Save" : "Loading..."}
             </button>
           </div>
         </form>

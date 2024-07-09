@@ -13,6 +13,15 @@ const premiumSlice = createSlice({
     reducers: {
         addPremium(state, action) {
             state.data.push(action.payload)
+        },
+        modifyPremium: (state, action) => {
+            const { _id, premiumName, premiumPrice, featuredItems } = action.payload
+            let item = state.data.find(d => d._id === _id)
+            if (item) {
+                item.premiumName = premiumName;
+                item.premiumPrice = premiumPrice;
+                item.premiumFeatures = featuredItems;
+            }
         }
     },
     extraReducers: (builder) => {
@@ -25,7 +34,7 @@ const premiumSlice = createSlice({
 })
 
 export default premiumSlice.reducer;
-export const { addPremium } = premiumSlice.actions;
+export const { addPremium, modifyPremium } = premiumSlice.actions;
 
 export const getPremiumData = createAsyncThunk(
     "getPremium/get",

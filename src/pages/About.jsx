@@ -12,7 +12,7 @@ const About = () => {
       <Pageinfo name="About" img="mordenyogi.jpeg" />
       <div className="col-span-12 lg:col-span-5 xl:col-span-4 text-center lg:text-start">
         <img
-          src={"http://localhost:8000/aboutPageImages/" + data.image}
+          src={data.image}
           alt=""
           className="h-1/2 w-1/2  border-[5px] border-white  shadow-xl rounded-full mx-auto"
         />

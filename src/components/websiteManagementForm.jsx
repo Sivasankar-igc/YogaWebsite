@@ -7,27 +7,32 @@ import { modifyContactPage } from "../REDUX_COMPONENTS/FEATURES/contactPageSlice
 import { modifyAboutPage } from "../REDUX_COMPONENTS/FEATURES/aboutPageSlice.mjs";
 import { useNavigate } from "react-router-dom";
 import YogaInstructorHandler from "./yogaInstructorForm";
+import HandlePremium from "./handlePremiumContent";
+import HandlePage from "./handlePage";
+import HandleFooter from "./handleFooter";
+import PaymentTable from "./PaymentTable";
 
 const handleImageUploading = async (e, route) => {
   const { files } = e.target;
-  const formData = new FormData();
-  formData.append("file", files[0]);
+
+  const form = new FormData();
+  form.append("file", files[0]);
+  form.append("upload_preset", "foja3qaf")
 
   try {
-    const response = await axios.put(`admin/upload${route}Image`, formData);
-    const { status, message } = response.data;
-
-    if (status) {
-      toast("Image uploaded successfully!!!");
-      return { status: true, fileName: message };
+    const response = await axios.post("https://api.cloudinary.com/v1_1/daadcshli/image/upload", form)
+    if (response.data) {
+      toast("Image Uploaded Successfully!!!")
+      return { status: true, fileName: response.data.url };
     } else {
-      toast("Image couldn't be uploaded!!!");
-      return { status: false, fileName: message };
+      toast("Something went wrong");
+      return { status: false, fileName: "" };
     }
+
   } catch (error) {
-    console.error(`Image uploading error --> ${error}`);
-    toast("Network connection error!!!");
-    return { status: false, fileName: message };
+    console.error(error)
+    toast("Network connection error")
+    return { status: false, fileName: "" };
   }
 };
 
@@ -230,7 +235,7 @@ const HomePageForm = () => {
         const { status, message } = res.data;
 
         if (status) {
-          dispatch(CBMethod(message));
+          dispatch(CBMethod(homePageData));
           setIsLoading(false);
           toast("Homepage modification successful!!!");
           navigate('/admin')
@@ -306,7 +311,6 @@ const HomePageForm = () => {
                             <img
                               className="h-[15rem] w-[15rem] rounded-md "
                               src={
-                                "http://localhost:8000/homePageImages/" +
                                 field.defaultValue
                               }
                             />
@@ -508,7 +512,7 @@ const AboutPageForm = () => {
         const { status, message } = res.data;
 
         if (status) {
-          dispatch(CBMethod(message));
+          dispatch(CBMethod(aboutPageData));
           setIsLoading(false);
           toast("About Page modification successful!!!");
         } else {
@@ -617,7 +621,6 @@ const AboutPageForm = () => {
                   <img
                     className="h-[15rem] w-[15rem] rounded-md "
                     src={
-                      "http://localhost:8000/aboutPageImages/" +
                       aboutPageData.image
                     }
                   />
@@ -649,11 +652,19 @@ export const WebsiteManagementForm = () => {
         <button onClick={() => handleButtonClick('contact')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Contacts</button>
         <button onClick={() => handleButtonClick('about')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit About</button>
         <button onClick={() => handleButtonClick('yogainstructor')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Yoga Instructor</button>
+        <button onClick={() => handleButtonClick('premium')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Premium Section</button>
+        <button onClick={() => handleButtonClick('footer')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Footer Section</button>
+        <button onClick={() => handleButtonClick('otherPage')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Other Pages</button>
+        <button onClick={() => handleButtonClick('paymentTable')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Payment Table</button>
       </div>
       {activeComponent === 'home' && <HomePageForm />}
       {activeComponent === 'contact' && <ContactPageForm />}
       {activeComponent === 'about' && <AboutPageForm />}
       {activeComponent === 'yogainstructor' && <YogaInstructorHandler />}
+      {activeComponent === "premium" && <HandlePremium />}
+      {activeComponent === "footer" && <HandleFooter />}
+      {activeComponent === "otherPage" && <HandlePage />}
+      {activeComponent === "paymentTable" && <PaymentTable />}
     </div>
   );
 };

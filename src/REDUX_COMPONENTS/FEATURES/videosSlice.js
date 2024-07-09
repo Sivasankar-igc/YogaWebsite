@@ -12,23 +12,21 @@ const videosSlice = createSlice({
   initialState,
   reducers: {
     addVideo: (state, action) => {
-      state.push(action.payload);
+      state.data.push(action.payload);
     },
     updateVideo: (state, action) => {
-      const { _id, heading, description, image, videoLink, completed } =
+      const { _id, heading, description, image, videoLink } =
         action.payload;
-      const video = state.find((video) => video._id === _id);
+      const video = state.data.find((video) => video._id === _id);
       if (video) {
         video.heading = heading;
         video.description = description;
         video.image = image;
         video.videoLink = videoLink;
-        video.completed = completed;
       }
     },
     deleteVideo: (state, action) => {
-      const { _id } = action.payload;
-      return state.filter((video) => video._id !== id);
+      state.data = state.data.filter(d => d._id !== action.payload)
     },
   },
   extraReducers: (builder) => {

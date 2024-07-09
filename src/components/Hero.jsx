@@ -20,12 +20,6 @@ const Hero = ({ userType }) => {
                 {data.heroSection.description}
               </p>
               {userType === "none" || "admin" && <div className="mt-6 sm:mt-12 flex lg:flex-row flex-col">
-                <a
-                  href="#!"
-                  className="bg-[#779393] py-3 px-8 border-2 border-[#779393] text-white hover:bg-opacity-90 rounded-full mr-2 my-1 duration-300"
-                >
-                  Join Class
-                </a>
                 <Link
                   to={'recordings'}
                   className="py-3 px-8 border-2 border-[#779393] text-[#779393] hover:bg-[#779393] duration-300 hover:text-white rounded-full my-1"
@@ -37,8 +31,7 @@ const Hero = ({ userType }) => {
           </div>
           <div className="col-span-12 lg:col-span-5 xl:col-span-4 text-center lg:text-start">
             <img
-              // src={"./Yogini.png"}
-              src={"http://localhost:8000/homePageImages/"+data.heroSection.image}
+              src={data.heroSection.image}
               alt=""
               className="border-[20px] border-white  shadow-xl rounded-full mx-auto"
             />

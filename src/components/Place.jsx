@@ -9,7 +9,7 @@ const Place = () => {
         <div className="items-center gap-x-12 sm:px-4 md:px-0 lg:flex">
           <div className="flex-1 sm:hidden lg:block">
             <img
-              src={"http://localhost:8000/homePageImages/"+data.yogaStudioShowCase.image}
+              src={data.yogaStudioShowCase.image}
               className="md:max-w-lg sm:rounded-lg"
               alt=""
             />

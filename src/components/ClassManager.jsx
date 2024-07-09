@@ -18,6 +18,8 @@ function Modal({ onclose, onSave, classData }) {
     contentLink: classData ? classData.contentLink : ""
   });
 
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
     if (classData) {
       setFormData(classData);
@@ -34,10 +36,31 @@ function Modal({ onclose, onSave, classData }) {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: files[0].name,
-    }));
+    setIsLoading(true)
+
+    const form = new FormData();
+    form.append("file", files[0]);
+    form.append("upload_preset", "foja3qaf")
+
+    axios.post("https://api.cloudinary.com/v1_1/daadcshli/image/upload", form)
+      .then(res => {
+        if (res.data) {
+          setFormData({
+            ...formData,
+            "indexImage": res.data.url
+          })
+          toast("Image Uploaded Successfully!!!")
+          setIsLoading(false)
+        } else {
+          toast("Something went wrong");
+          setIsLoading(false)
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        toast("Network connection error")
+        setIsLoading(false)
+      })
   };
 
   const handleSubmit = (e) => {
@@ -56,7 +79,7 @@ function Modal({ onclose, onSave, classData }) {
             <IoClose size={24} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={(e) => { if (!isLoading) handleSubmit(e) }} className="space-y-5">
           <div>
             <label className="font-medium">Name</label>
             <input
@@ -101,9 +124,15 @@ function Modal({ onclose, onSave, classData }) {
             ></textarea>
           </div>
 
-          <button className="w-full bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9] transition duration-300">
-            {classData ? "Edit" : "Add"}
-          </button>
+          {
+            !isLoading
+              ? <button className="w-full bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9] transition duration-300">
+                {classData ? "Edit" : "Add"}
+              </button>
+              : <button className="w-full bg-[#779393] text-white px-6 py-2 rounded-full hover:bg-[#75b9b9] transition duration-300">
+                Loading...
+              </button>
+          }
         </form>
       </main>
     </div>
@@ -111,7 +140,7 @@ function Modal({ onclose, onSave, classData }) {
 }
 
 const ClassManager = () => {
-  const { data: classes } = useSelector((state) => state.yogacontent);
+  const { data: classes, status } = useSelector((state) => state.yogacontent);
   const { data: homepagedata } = useSelector(state => state.homepage);
 
   const dispatch = useDispatch();
@@ -220,9 +249,9 @@ const ClassManager = () => {
               <FaEdit onClick={() => handleEditButtonClick(item)} style={{ cursor: "pointer" }} />
               <MdDelete onClick={() => handleDeleteClass(item._id)} style={{ cursor: "pointer" }} />
             </div>
-            <Link to={`${item.contentHeading}`}>
+            <Link to={`${item.contentHeading}/${item.description}`}>
               <img
-                src={`/${item.indexImage}`}
+                src={item.indexImage}
                 loading="lazy"
                 alt={item.contentHeading}
                 className="w-full h-48 rounded-t-md object-contain"

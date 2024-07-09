@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const TypesOfClasses = () => {
+const TypesOfClasses = ({ userType }) => {
   const [showAll, setShowAll] = useState(false);
   const { data: yogaContents } = useSelector(state => state.yogacontent);
   const { data: homepagedata } = useSelector(state => state.homepage)
@@ -22,14 +22,14 @@ const TypesOfClasses = () => {
       <div className="mt-12 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {
           displayedYog.map((item, index) => (
-            <Link to={`${item.contentHeading}/${item.description}`}>
+            <Link to={userType !== undefined && userType !== "none" ? `classes/${item.contentHeading}/${item.description}` : `${item.contentHeading}/${item.description}`} key={item.contentId}>
               <article
                 className="max-w-md mx-auto mt-4  rounded-md duration-300  hover:shadow-lg"
                 key={item.contentId}
               >
                 <a href={item.contentLink}>
                   <img
-                    src={`/${item.indexImage}`}
+                    src={item.indexImage}
                     loading="lazy"
                     alt={item.contentHeading}
                     className="w-full h-48 rounded-t-md object-contain"

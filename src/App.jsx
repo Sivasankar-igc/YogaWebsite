@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import User from './pages/User';
 import Home from './pages/Home';
 import Classes from './pages/Classes';
@@ -13,6 +13,7 @@ import Recordings from './pages/Recordings';
 import BlogsDetails from './pages/BlogsDetails';
 import Err404 from './components/Err404';
 import { AuthProvider } from './security/AuthContext';
+import { useAuth } from './security/AuthContext';
 import PrivateRoute from './security/PrivateRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import { statusCode } from './utils/statusFile.mjs';
@@ -29,34 +30,19 @@ import { getAboutPageContents } from './REDUX_COMPONENTS/FEATURES/aboutPageSlice
 import { getYogaInstructorData } from './REDUX_COMPONENTS/FEATURES/yogaInstructorSlice.mjs';
 import { getVideoContents } from './REDUX_COMPONENTS/FEATURES/videosSlice';
 import { getBlogs } from './REDUX_COMPONENTS/FEATURES/blogSlice.mjs';
+import { getUserData } from './REDUX_COMPONENTS/FEATURES/userSlice.mjs';
+import NavigateToUser from './security/NavigateToUser';
+import { getPages } from './REDUX_COMPONENTS/FEATURES/pageSlice.mjs';
+import { getFooter } from './REDUX_COMPONENTS/FEATURES/footerSlice.mjs';
+import OtherPage from './components/OtherPage';
 
-axios.defaults.baseURL = "http://localhost:8000/api/"
-// axios.defaults.baseURL = "/api/"
+// axios.defaults.baseURL = "http://localhost:8000/api/"
+axios.defaults.baseURL = "/api/"
 const App = () => {
-
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   axios.post("admin/addContent", { 
-  //     contentHeading: "Prenatal Yoga", 
-  //     contentLink: "https://youtube.com", 
-  //     description: "Focuses on flow and breath, building core strength.", 
-  //     indexImage: "Sukh.png" })
-  // }, [])
-  // useEffect(() => {
-  //   axios.post("admin/addPremium", {
-  //     premiumName: "Silver Premium",
-  //     premiumPeriod: {
-  //       numericValue: 30,
-  //       alphabetValue: "1 Month"
-  //     },
-  //     premiumPrice: 500,
-  //     discount: 12,
-  //     backgroundImage: "Bruk.jpg",
-  //     premiumFeatures: ["Average", "Access to every premium video", "Attain live session", "24/7 Consultancy Available"]
-  //   })
-  // }, [])
   useEffect(() => {
+    dispatch(getUserData())
     dispatch(getYogaContents())
     dispatch(getPremiumData())
     dispatch(getHomePageContents())
@@ -65,50 +51,57 @@ const App = () => {
     dispatch(getYogaInstructorData())
     dispatch(getVideoContents())
     dispatch(getBlogs())
+    dispatch(getPages())
+    dispatch(getFooter())
   }, [])
 
   const { status: yogaContentStatus } = useSelector(state => state.yogacontent)
   const { status: homepagestatus } = useSelector(state => state.homepage)
   const { status: contactpagestatus } = useSelector(state => state.contactpage)
   const { status: aboutpagestatus } = useSelector(state => state.aboutpage)
-  const { status: instructorStatus } = useSelector(state => state.yogainstructor);
+  const { status: footerStatus } = useSelector(state => state.footer)
 
-  if (contactpagestatus === statusCode.IDLE && homepagestatus === statusCode.IDLE && yogaContentStatus === statusCode.IDLE && aboutpagestatus === statusCode.IDLE && instructorStatus === statusCode.IDLE) {
+
+  if (contactpagestatus === statusCode.IDLE && homepagestatus === statusCode.IDLE && yogaContentStatus === statusCode.IDLE && aboutpagestatus === statusCode.IDLE && footerStatus === statusCode.IDLE) {
     return (
       <AuthProvider>
         <Router>
-          <Routes>
-            <Route path="/" element={<User userType="none" />}>
-              <Route index element={<Home userType="none" />} />
-            </Route>
-            <Route path="*" element={<Err404 />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <NavigateToUser>
+            <Routes>
+              <Route path="/" element={<User userType="none" />}>
+                <Route index element={<Home userType="none" />} />
+              </Route>
+              <Route path="*" element={<Err404 />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
 
-            <Route path="/user" element={<PrivateRoute userType="user" element={User} />}>
-              <Route index element={<Home userType="user" />} />
-              <Route path="classes" element={<Classes userType="user" />} />
-              <Route path="classes/:title/:description" element={<YogaClassDetails />} />
-              <Route path="blogs" element={<Blogs userType="user" />} />
-              <Route path="blogs/:title/:description" element={<BlogsDetails />} />
-              <Route path="about" element={<About />} />
-              <Route path="contacts" element={<Contacts />} />
-              <Route path="recordings" element={<Recordings />} />
-              <Route path="payment/:paymentDetails" element={<PaymentForm />} />
-            </Route>
+              <Route path="/user" element={<PrivateRoute userType="user" element={User} />}>
+                <Route index element={<Home userType="user" />} />
+                <Route path="classes" element={<Classes userType="user" />} />
+                <Route path="classes/:title/:description" element={<YogaClassDetails />} />
+                <Route path="blogs" element={<Blogs userType="user" />} />
+                <Route path="blogs/:title/:description" element={<BlogsDetails />} />
+                <Route path="about" element={<About />} />
+                <Route path="contacts" element={<Contacts />} />
+                <Route path="recordings" element={<Recordings />} />
+                <Route path="payment/:paymentDetails" element={<PaymentForm />} />
+                <Route path="pages/:pageName" element={<OtherPage />} />
+              </Route>
 
-            <Route path="/admin" element={<PrivateRoute userType="admin" element={User} />}>
-              <Route path="contentForm" element={<WebsiteManagementForm />} />
-              <Route index element={<Home userType="admin" />} />
-              <Route path="classes" element={<Classes userType="admin" />} />
-              <Route path="classes/:title" element={<YogaClassDetails />} />
-              <Route path="blogs" element={<Blogs userType="admin" />} />
-              <Route path="blogs/:title/:description" element={<BlogsDetails />} />
-              <Route path="about" element={<About />} />
-              <Route path="contacts" element={<Contacts />} />
-              <Route path="recordings" element={<Recordings userType="admin" />} />
-            </Route>
-          </Routes>
+              <Route path="/admin" element={<PrivateRoute userType="admin" element={User} />}>
+                <Route path="contentForm" element={<WebsiteManagementForm />} />
+                <Route index element={<Home userType="admin" />} />
+                <Route path="classes" element={<Classes userType="admin" />} />
+                <Route path="classes/:title/:description" element={<YogaClassDetails />} />
+                <Route path="blogs" element={<Blogs userType="admin" />} />
+                <Route path="blogs/:title/:description" element={<BlogsDetails />} />
+                <Route path="about" element={<About />} />
+                <Route path="contacts" element={<Contacts />} />
+                <Route path="recordings" element={<Recordings userType="admin" />} />
+                <Route path="pages/:pageName" element={<OtherPage />} />
+              </Route>
+            </Routes>
+          </NavigateToUser>
         </Router>
         <ToastContainer />
       </AuthProvider>
@@ -131,7 +124,9 @@ const App = () => {
   }
   else {
     return (
-      <></>
+      <>
+        Something went wrong!!!
+      </>
     )
   }
 

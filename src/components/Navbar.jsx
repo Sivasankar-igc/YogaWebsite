@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useAuth } from "../security/AuthContext";
+import {toast} from "react-toastify"
+import { removeUser } from "../REDUX_COMPONENTS/FEATURES/userSlice.mjs";
 
 // Profile Dropdown
 const ProfileDropDown = (props) => {
   const [state, setState] = useState(false);
   const profileRef = useRef();
+  const nav = useNavigate()
+  const dispatch = useDispatch()
+  const { setUser } = useAuth()
 
   const navigation = [
     // { title: "Dashboard", path: "javascript:void(0)" },
@@ -14,10 +22,28 @@ const ProfileDropDown = (props) => {
 
   useEffect(() => {
     const handleDropDown = (e) => {
-      if (!profileRef.current.contains(e.target)) setState(false);
+      // if (!profileRef.current.contains(e.target)) setState(false);
     };
     document.addEventListener("click", handleDropDown);
   }, []);
+
+  const handleLogout = () => {
+    
+    axios.put("user/logout")
+      .then((res) => {
+        if (res.data) {
+          dispatch(removeUser())
+          setUser({ userType: "none" })
+          nav("/")
+        } else {
+          toast("Something went wrong!!!")
+        }
+      })
+      .catch(err => {
+        console.error(`Clientside error : logout error --> ${err}`)
+        toast("Network connection error!!!")
+      })
+  }
 
   return (
     <div className={`relative ${props.class}`}>
@@ -55,8 +81,7 @@ const ProfileDropDown = (props) => {
             </Link>
           </div>
         ) : (
-          <Link
-            to="/login"
+          <button onClick={() => handleLogout()}
             className="max-h-10 w-36 flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-[#779393] hover:bg-gray-700 active:bg-gray-900 rounded-full md:inline-flex"
           >
             <svg
@@ -72,7 +97,7 @@ const ProfileDropDown = (props) => {
               />
             </svg>
             Sign out
-          </Link>
+          </button>
         )}
 
         {/* </button> */}
@@ -97,8 +122,6 @@ const ProfileDropDown = (props) => {
   );
 };
 
-import React from "react";
-
 const Navbar = ({ userType }) => {
   const [menuState, setMenuState] = useState(false);
 
@@ -109,7 +132,7 @@ const Navbar = ({ userType }) => {
     { title: "About", path: "about" },
     { title: "Blog", path: "blogs" },
     { title: "Contact", path: "contacts" },
-    ...(userType==="admin"  ? [{ title: "Edit info", path: "contentForm" }] : []),
+    ...(userType === "admin" ? [{ title: "Edit info", path: "contentForm" }] : []),
   ];
   return (
     <nav className="bg-white border-b sticky top-0 z-50">
@@ -117,7 +140,7 @@ const Navbar = ({ userType }) => {
         <div className="flex-none lg:flex-initial">
           <Link to="/user">
             <img
-              src="https://benifitsofyogawithmanoj.in/wp-content/uploads/2024/03/logo.svg"
+              src={`/logo.svg`}
               width={120}
               height={50}
               alt="Yogi"
@@ -154,7 +177,7 @@ const Navbar = ({ userType }) => {
             />
           </div>
           <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
-            <form className="flex items-center space-x-2 border rounded-md p-2">
+            {/* <form className="flex items-center space-x-2 border rounded-md p-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 flex-none text-gray-300"
@@ -174,7 +197,7 @@ const Navbar = ({ userType }) => {
                 type="text"
                 placeholder="Search"
               />
-            </form>
+            </form> */}
             <ProfileDropDown class="hidden lg:block" userType={userType} />
             <button
               className="outline-none text-gray-400 block lg:hidden"

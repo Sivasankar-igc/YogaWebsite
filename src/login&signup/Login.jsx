@@ -4,11 +4,9 @@ import { useAuth } from "../security/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
-import { useDispatch } from "react-redux"
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addUser } from "../REDUX_COMPONENTS/FEATURES/userSlice.mjs";
-
-
 
 const SocialLoginButton = () => (
   <Fragment>
@@ -24,15 +22,14 @@ const SocialLoginButton = () => (
 );
 
 const SignInForm = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [validated, setValidated] = useState(false);
   const [userDetails, setUserDetails] = useState({
     emailId: "",
-    password: ""
-  })
+    password: "",
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,45 +41,60 @@ const SignInForm = () => {
     }
 
     setValidated(true);
+    handleLogin();
   };
+
   const { login } = useAuth();
 
   const handleUserDetails = (e) => {
     setUserDetails({
       ...userDetails,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const handleLogin = (type) => {
-
-
-    axios.post(`/${type}/${type}Login`, {
-      emailId: userDetails.emailId,
-      password: userDetails.password
-    })
-      .then(res => {
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleLogin = () => {
+    axios
+      .post(`/user/userLogin`, {
+        emailId: userDetails.emailId,
+        password: userDetails.password,
+      })
+      .then((res) => {
         let status = res.data.status;
         let message = res.data.message;
 
         if (status === false) {
-          toast(message)
+          // Try admin login if user login fails
+          axios
+            .post(`/admin/adminLogin`, {
+              emailId: userDetails.emailId,
+              password: userDetails.password,
+            })
+            .then((res) => {
+              let status = res.data.status;
+              let message = res.data.message;
+
+              if (status === false) {
+                toast(message);
+              } else {
+                login({ userType: "admin" });
+                navigate("/admin");
+              }
+            })
+            .catch((err) => {
+              console.error(`Admin Login Error --> ${err}`);
+              toast("Network connection error!!!");
+            });
         } else {
-          login({ userType: type });
-          if (type === "admin") {
-            navigate("/admin");
-          } else if (type === "user") {
-            dispatch(addUser(message))
-            navigate("/user");
-          }
+          login({ userType: "user" });
+          dispatch(addUser(message));
+          navigate("/user");
         }
       })
-      .catch(err => {
-        console.error(`Login Error --> ${err}`)
-        toast("Network connection error!!!")
-      })
+      .catch((err) => {
+        console.error(`User Login Error --> ${err}`);
+        toast("Network connection error!!!");
+      });
   };
-
   return (
     <form noValidate validated={validated.toString()} onSubmit={handleSubmit}>
       <div className="mb-4">
@@ -117,31 +129,18 @@ const SignInForm = () => {
         </label>
       </div>
       <button
-        onClick={() => handleLogin("user")}
-        className="bg-[#779393] text-white py-3 px-6 rounded w-full mb-5"
+       type="submit"
+        className="bg-[#779393] text-white py-3 px-6 rounded w-full"
       >
         Log In
       </button>
-      <button
-        onClick={() => handleLogin("admin")}
-        className="bg-[#779393] text-white py-3 px-6 rounded w-full"
-      >
-        Admin Log In
-      </button>
+      
       <button
         onClick={() => navigate("/forgotpassword")}
         className="hover:text-blue-600 py-2 px-4 rounded-lg w-full"
       >
         Forget your password?
       </button>
-      {/* <div className="relative">
-        <hr className="my-8 border-t border-gray-300" />
-        <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
-          Or
-        </span>
-      </div>
-
-      <SocialLoginButton /> */}
     </form>
   );
 };
@@ -151,7 +150,7 @@ const SignUpForm = () => {
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
 
-  const { login } = useAuth()
+  const { login } = useAuth();
 
   const [userDetails, setUserDetails] = useState({
     firstName: "",
@@ -163,56 +162,57 @@ const SignUpForm = () => {
     phno: "",
     gender: "",
     password: "",
-    confirmPassword: ""
-  })
+    confirmPassword: "",
+  });
 
   const handleUserDetails = (e) => {
     setUserDetails({
       ...userDetails,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (userDetails.password === "") {
-      window.alert("Password can't be empty!!!")
+      window.alert("Password can't be empty!!!");
       return;
     } else if (userDetails.password !== userDetails.confirmPassword) {
-      window.alert("Confirm password and password must be same!!!")
+      window.alert("Confirm password and password must be same!!!");
       return;
     } else {
-      axios.post("user/signin", {
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
-        emailId: userDetails.emailId,
-        phno: userDetails.phno,
-        gender: userDetails.gender,
-        day: userDetails.day,
-        month: userDetails.month,
-        year: userDetails.year,
-        password: userDetails.password
-      })
+      axios
+        .post("user/signin", {
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
+          emailId: userDetails.emailId,
+          phno: userDetails.phno,
+          gender: userDetails.gender,
+          day: userDetails.day,
+          month: userDetails.month,
+          year: userDetails.year,
+          password: userDetails.password,
+        })
         .then((res) => {
           let response = res.data;
           let status = response.status;
           let message = response.message;
           if (status === false && message !== null) {
-            toast(message)
+            toast(message);
           } else if (status === false && message === null) {
-            toast("Something went wrong !!!")
+            toast("Something went wrong !!!");
           } else if (status === true) {
-            dispatch(addUser(message))
+            dispatch(addUser(message));
 
             login({ userType: "user" });
             navigate("/user");
           }
         })
-        .catch(err => {
-          toast("Network connection error!!!")
-          console.error(`Sign In Error --> ${err}`)
-        })
+        .catch((err) => {
+          toast("Network connection error!!!");
+          console.error(`Sign In Error --> ${err}`);
+        });
     }
 
     setValidated(true);
@@ -239,7 +239,7 @@ const SignUpForm = () => {
   );
 
   return (
-    <form noValidate validated={validated.toString()} onSubmit={handleSubmit} >
+    <form noValidate validated={validated.toString()} onSubmit={handleSubmit}>
       <div className="flex flex-wrap">
         <div className="w-full lg:w-1/2">
           <div className="flex flex-col mb-6 mx-2">
@@ -333,7 +333,9 @@ const SignUpForm = () => {
               className="bg-blue-50 dark:bg-slate-700 dark:bg-opacity-50 rounded-xl min-h-[54px] leading-10 px-4 focus:outline-none focus:bg-blue-100 dark:focus:bg-opacity-100"
               onChange={handleUserDetails}
             >
-              <option hidden defaultValue>Gender</option>
+              <option hidden defaultValue>
+                Gender
+              </option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="others">Others</option>
@@ -423,6 +425,15 @@ const SignUpForm = () => {
       >
         Sign Up
       </button>
+
+      {/* <div className="relative">
+        <hr className="my-6 md:my-12" />
+        <span className="px-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0b1727]">
+          Or
+        </span>
+      </div>
+
+      <SocialLoginButton /> */}
     </form>
   );
 };
@@ -448,19 +459,21 @@ const SignInSignUp = () => {
                 <div className="text-center mb-6 lg:mb-12">
                   <div className="bg-blue-50 dark:bg-slate-700 w-64 flex justify-center mx-auto rounded-xl p-2">
                     <button
-                      className={`${active === "signIn"
-                        ? "bg-white dark:bg-slate-800 text-black dark:text-white rounded-xl"
-                        : ""
-                        } py-3 w-1/2 h-full opacity-60`}
+                      className={`${
+                        active === "signIn"
+                          ? "bg-white dark:bg-slate-800 text-black dark:text-white rounded-xl"
+                          : ""
+                      } py-3 w-1/2 h-full opacity-60`}
                       onClick={() => setActive("signIn")}
                     >
                       Sign In
                     </button>
                     <button
-                      className={`${active === "signUp"
-                        ? "bg-white dark:bg-slate-800 text-black dark:text-white rounded-xl"
-                        : ""
-                        } py-3 w-1/2 h-full opacity-60`}
+                      className={`${
+                        active === "signUp"
+                          ? "bg-white dark:bg-slate-800 text-black dark:text-white rounded-xl"
+                          : ""
+                      } py-3 w-1/2 h-full opacity-60`}
                       onClick={() => setActive("signUp")}
                     >
                       Sign Up

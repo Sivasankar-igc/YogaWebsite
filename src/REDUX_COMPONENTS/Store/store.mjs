@@ -9,6 +9,8 @@ import aboutPageSlice from "../FEATURES/aboutPageSlice.mjs";
 import yogaInstructorSlice from "../FEATURES/yogaInstructorSlice.mjs";
 import videosSlice from "../FEATURES/videosSlice";
 import blogSlice from "../FEATURES/blogSlice.mjs";
+import pageSlice from "../FEATURES/pageSlice.mjs";
+import footerSlice from "../FEATURES/footerSlice.mjs";
 
 const store = configureStore({
     reducer: {
@@ -21,7 +23,9 @@ const store = configureStore({
         aboutpage: aboutPageSlice,
         yogainstructor: yogaInstructorSlice,
         videos:videosSlice,
-        blog:blogSlice
+        blog:blogSlice,
+        page:pageSlice,
+        footer:footerSlice
     }
 })
 
