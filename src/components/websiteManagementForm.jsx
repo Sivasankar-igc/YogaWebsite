@@ -647,15 +647,15 @@ export const WebsiteManagementForm = () => {
   };
   return (
     <div>
-      <div className="flex w-full justify-center mt-5 gap-5">
-        <button onClick={() => handleButtonClick('home')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Home</button>
-        <button onClick={() => handleButtonClick('contact')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Contacts</button>
-        <button onClick={() => handleButtonClick('about')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit About</button>
-        <button onClick={() => handleButtonClick('yogainstructor')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Yoga Instructor</button>
-        <button onClick={() => handleButtonClick('premium')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Premium Section</button>
-        <button onClick={() => handleButtonClick('footer')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Footer Section</button>
-        <button onClick={() => handleButtonClick('otherPage')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Other Pages</button>
-        <button onClick={() => handleButtonClick('paymentTable')} className="block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Payment Table</button>
+      <div className="flex w-full justify-center mt-5 gap-5 flex-wrap">
+        <button onClick={() => handleButtonClick('home')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Home</button>
+        <button onClick={() => handleButtonClick('contact')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Contacts</button>
+        <button onClick={() => handleButtonClick('about')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit About</button>
+        <button onClick={() => handleButtonClick('yogainstructor')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Yoga Instructor</button>
+        <button onClick={() => handleButtonClick('premium')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Premium Section</button>
+        <button onClick={() => handleButtonClick('footer')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Footer Section</button>
+        <button onClick={() => handleButtonClick('otherPage')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Edit Other Pages</button>
+        <button onClick={() => handleButtonClick('paymentTable')} className="min-w-[10rem] block w-auto py-3 px-4 font-medium text-sm text-center text-white bg-[#779393] hover:bg-[#6ec4c4] active:bg-[#306666] active:shadow-none rounded-lg shadow">Payment Table</button>
       </div>
       {activeComponent === 'home' && <HomePageForm />}
       {activeComponent === 'contact' && <ContactPageForm />}

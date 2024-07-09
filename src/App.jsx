@@ -36,8 +36,8 @@ import { getPages } from './REDUX_COMPONENTS/FEATURES/pageSlice.mjs';
 import { getFooter } from './REDUX_COMPONENTS/FEATURES/footerSlice.mjs';
 import OtherPage from './components/OtherPage';
 
-// axios.defaults.baseURL = "http://localhost:8000/api/"
-axios.defaults.baseURL = "/api/"
+axios.defaults.baseURL = "http://localhost:8000/api/"
+// axios.defaults.baseURL = "/api/"
 const App = () => {
   const dispatch = useDispatch();
 
@@ -70,6 +70,16 @@ const App = () => {
             <Routes>
               <Route path="/" element={<User userType="none" />}>
                 <Route index element={<Home userType="none" />} />
+                <Route index element={<Home userType="user" />} />
+                <Route path="classes" element={<Classes userType="user" />} />
+                <Route path="classes/:title/:description" element={<YogaClassDetails />} />
+                <Route path="blogs" element={<Blogs userType="user" />} />
+                <Route path="blogs/:title/:description" element={<BlogsDetails />} />
+                <Route path="about" element={<About />} />
+                <Route path="contacts" element={<Contacts />} />
+                <Route path="recordings" element={<Recordings />} />
+                <Route path="payment/:paymentDetails" element={<PaymentForm />} />
+                <Route path="pages/:pageName" element={<OtherPage />} />
               </Route>
               <Route path="*" element={<Err404 />} />
               <Route path="/login" element={<Login />} />

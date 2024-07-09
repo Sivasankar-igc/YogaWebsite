@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { FaEdit } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
+import { FiSave } from "react-icons/fi";
+import { IoMdAdd } from "react-icons/io";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import { modifyPage, addPage, removePage } from "../REDUX_COMPONENTS/FEATURES/pageSlice.mjs";
@@ -94,27 +97,27 @@ const HandleFooter = () => {
                                                     ? <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                                         {
                                                             footer.footerLinks.map(footerLink => (
-                                                                <div style={{ display: "flex", marginBottom: "15px" }}>
-                                                                    <h3 className="font-medium capitalize">{footerLink.name} &nbsp;</h3>
+                                                                <div className="flexflex-col mb-4 ">
+                                                                    <h3 className=" font-medium capitalize">{footerLink.name} &nbsp;</h3>
                                                                     {
                                                                         currentLinkId === footerLink._id
-                                                                            ? <div style={{ display: "flex" }}>
+                                                                            ? <div className="flex">
                                                                                 <input className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" type="text" defaultValue={footerLink.url} onChange={(e) => setUpdateLink(e.target.value)} />
                                                                                 <div style={{ display: "flex" }}>
-                                                                                    <button type="button" className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" onClick={() => handleUpdation(footer.footerLabel, footerLink.name)}>Save</button>
+                                                                                    <button type="button" className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" onClick={() => handleUpdation(footer.footerLabel, footerLink.name)}><FiSave/></button>
                                                                                     <button type="button" className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" onClick={() => { setCurrentLinkId(null); setUpdateLink("") }}>Cancel</button>
                                                                                 </div>
                                                                             </div>
-                                                                            : <div style={{ display: "flex" }}>
+                                                                            : <div className="flex gap-5 justify-center items-center">
                                                                                 <input type="text" defaultValue={footerLink.url} disabled className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" />
-                                                                                <button type="button" className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" onClick={() => setCurrentLinkId(footerLink._id)}>Edit</button>
+                                                                                <button type="button" className=" text-[#779393] h-10 w-10 justify-center items-center rounded-full hover:bg-[#75b9b9] transition duration-300" onClick={() => setCurrentLinkId(footerLink._id)}><FaEdit/></button>
                                                                             </div>
                                                                     }
                                                                 </div>
                                                             ))
                                                         }
                                                     </div>
-                                                    : <div>
+                                                    : <div className="flex flex-col-reverse items-end">
 
                                                         {
                                                             canAddFooter
@@ -126,7 +129,7 @@ const HandleFooter = () => {
                                                                     }}>Cancel</button>
                                                                 </div>
                                                                 : <div style={{ marginBottom: "15px" }}>
-                                                                    <button className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => setCanAddFooter(true)}>Add</button>
+                                                                    <button className=" mt-6 border text-[#779393] px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => setCanAddFooter(true)}> <IoMdAdd/> </button>
                                                                 </div>
                                                         }
                                                         {
@@ -175,8 +178,8 @@ const HandleFooter = () => {
                                                                         <input className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" type="text" defaultValue={footerLink.name} disabled />
                                                                         <input className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg" type="text" defaultValue={footerLink.url} disabled />
                                                                         <div style={{ display: "flex" }}>
-                                                                            <button className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => { setCurrentLinkId(footerLink._id); setUpdateLink(footerLink.url) }}>edit</button>
-                                                                            <button className="bg-[#779393] text-white px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => removeLink(footerLink._id)}>Delete</button>
+                                                                            <button className=" text-[#779393] px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => { setCurrentLinkId(footerLink._id); setUpdateLink(footerLink.url) }}><FaEdit/></button>
+                                                                            <button className=" text-[#779393] px-4 py-1 rounded-full hover:bg-[#75b9b9] transition duration-300" type="button" onClick={() => removeLink(footerLink._id)}><MdDelete/></button>
                                                                         </div>
                                                                     </div>
                                                             ))

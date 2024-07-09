@@ -3,16 +3,16 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../security/AuthContext";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 import { removeUser } from "../REDUX_COMPONENTS/FEATURES/userSlice.mjs";
 
 // Profile Dropdown
 const ProfileDropDown = (props) => {
   const [state, setState] = useState(false);
   const profileRef = useRef();
-  const nav = useNavigate()
-  const dispatch = useDispatch()
-  const { setUser } = useAuth()
+  const nav = useNavigate();
+  const dispatch = useDispatch();
+  const { setUser } = useAuth();
 
   const navigation = [
     // { title: "Dashboard", path: "javascript:void(0)" },
@@ -28,22 +28,22 @@ const ProfileDropDown = (props) => {
   }, []);
 
   const handleLogout = () => {
-    
-    axios.put("user/logout")
+    axios
+      .put("user/logout")
       .then((res) => {
         if (res.data) {
-          dispatch(removeUser())
-          setUser({ userType: "none" })
-          nav("/")
+          dispatch(removeUser());
+          setUser({ userType: "none" });
+          nav("/");
         } else {
-          toast("Something went wrong!!!")
+          toast("Something went wrong!!!");
         }
       })
-      .catch(err => {
-        console.error(`Clientside error : logout error --> ${err}`)
-        toast("Network connection error!!!")
-      })
-  }
+      .catch((err) => {
+        console.error(`Clientside error : logout error --> ${err}`);
+        toast("Network connection error!!!");
+      });
+  };
 
   return (
     <div className={`relative ${props.class}`}>
@@ -81,7 +81,8 @@ const ProfileDropDown = (props) => {
             </Link>
           </div>
         ) : (
-          <button onClick={() => handleLogout()}
+          <button
+            onClick={() => handleLogout()}
             className="max-h-10 w-36 flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-[#779393] hover:bg-gray-700 active:bg-gray-900 rounded-full md:inline-flex"
           >
             <svg
@@ -103,8 +104,9 @@ const ProfileDropDown = (props) => {
         {/* </button> */}
       </div>
       <ul
-        className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? "" : "lg:hidden"
-          }`}
+        className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${
+          state ? "" : "lg:hidden"
+        }`}
       >
         {navigation.map((item, idx) => (
           <li>
@@ -132,45 +134,41 @@ const Navbar = ({ userType }) => {
     { title: "About", path: "about" },
     { title: "Blog", path: "blogs" },
     { title: "Contact", path: "contacts" },
-    ...(userType === "admin" ? [{ title: "Edit info", path: "contentForm" }] : []),
+    ...(userType === "admin"
+      ? [{ title: "Edit info", path: "contentForm" }]
+      : []),
   ];
   return (
     <nav className="bg-white border-b sticky top-0 z-50">
       <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto md:px-8">
         <div className="flex-none lg:flex-initial">
           <Link to="/user">
-            <img
-              src={`/logo.svg`}
-              width={120}
-              height={50}
-              alt="Yogi"
-            />
+            <img src={`/logo.svg`} width={120} height={50} alt="Yogi" />
           </Link>
         </div>
         <div className="flex-1 flex items-center justify-between">
           <div
-            className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? "" : "hidden"
-              }`}
+            className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${
+              menuState ? "" : "hidden"
+            }`}
           >
-            {userType === "none" ||
-              ("admin" && (
-                <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0 ">
-                  {navigation.map((item, idx) => (
-                    <li className="h-8">
-                      {" "}
-                      <NavLink
-                        onClick={() => setMenuState(!menuState)}
-                        end
-                        to={item.path}
-                        key={idx}
-                        className="text-gray-600 hover:text-gray-900 pb-2"
-                      >
-                        {item.title}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
+            <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0 ">
+              {navigation.map((item, idx) => (
+                <li className="h-8">
+                  {" "}
+                  <NavLink
+                    onClick={() => setMenuState(!menuState)}
+                    end
+                    to={item.path}
+                    key={idx}
+                    className="text-gray-600 hover:text-gray-900 pb-2"
+                  >
+                    {item.title}
+                  </NavLink>
+                </li>
               ))}
+            </ul>
+
             <ProfileDropDown
               class="mt-5 pt-5 border-t lg:hidden"
               userType={userType}
